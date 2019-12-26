@@ -29,3 +29,9 @@ End Function
 ## Copying
 Visual Urlang is proprietary software. Licensing terms are detailed in the
 End-User License Agreement, available in the file [EULA.md](EULA.md).
+
+The WSOM SDK is licensed under the Common Distribution and Development License
+(CDDL) version 1.1. Details are found in the file [WSOM_SDK/COPYING.md](WSOM_SDK/COPYING.MD).
+
+Code under the folder *External* is imported from other projects and each package
+has its own subdirectory there with a license.

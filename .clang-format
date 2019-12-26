@@ -1,0 +1,7 @@
+BreakBeforeBraces: Allman
+ColumnLimit: 80
+IndentWidth: 4
+Language: Cpp
+Standard: Cpp03
+TabWidth: 4
+SpaceBeforeAssignmentOperators: true
