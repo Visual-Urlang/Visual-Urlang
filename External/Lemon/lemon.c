@@ -1358,8 +1358,8 @@ void FindActions(struct lemon *lemp)
                     if (SetFind(cfp->fws, j))
                     {
                         /* Add a reduce action to the state "stp" which will
-                        *reduce by the * rule "cfp->rp" if the lookahead symbol
-                        *is "lemp->symbols[j]" */
+                         *reduce by the * rule "cfp->rp" if the lookahead symbol
+                         *is "lemp->symbols[j]" */
                         Action_add(&stp->ap, REDUCE, lemp->symbols[j],
                                    (char *)cfp->rp);
                     }
@@ -4712,7 +4712,7 @@ PRIVATE int translate_code(struct lemon *lemp, struct rule *rp)
         if (zSkip != 0)
         {
             /* The code contains a special comment that indicates that it is
-            *safe * for the LHS label to overwrite left-most RHS label. */
+             *safe * for the LHS label to overwrite left-most RHS label. */
             lhsdirect = 1;
         }
         else
