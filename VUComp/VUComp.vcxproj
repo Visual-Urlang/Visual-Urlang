@@ -71,19 +71,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(SolutionDir)External\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)External\WinFlex;$(SolutionDir)External\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(SolutionDir)External\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)External\WinFlex;$(SolutionDir)External\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(SolutionDir)External\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)External\WinFlex;$(SolutionDir)External\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir);$(SolutionDir)External\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)External\WinFlex;$(SolutionDir)External\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClCompile Include="VUComp.cpp" />
     <ClCompile Include="$(TargetDir)parse.cpp" />
+    <ClCompile Include="$(TargetDir)lex.yy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="parse.y">
@@ -173,6 +174,31 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VUComp.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="lex.l">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)External\WinFlex\win_flex.exe -o$(TargetDir)lex.yy.cpp  --header-file=$(TargetDir)lex.yy.h %(FullPath) 
+
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(TargetDir)lex.yy.cpp;$(TargetDir)lex.yy.h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)External\WinFlex\win_flex.exe -o$(TargetDir)lex.yy.cpp  --header-file=$(TargetDir)lex.yy.h %(FullPath) 
+
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(TargetDir)lex.yy.cpp;$(TargetDir)lex.yy.h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)External\WinFlex\win_flex.exe -o$(TargetDir)lex.yy.cpp  --header-file=$(TargetDir)lex.yy.h %(FullPath) 
+
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(TargetDir)lex.yy.cpp;$(TargetDir)lex.yy.h;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)External\WinFlex\win_flex.exe -o$(TargetDir)lex.yy.cpp  --header-file=$(TargetDir)lex.yy.h %(FullPath) 
+
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(TargetDir)lex.yy.cpp;$(TargetDir)lex.yy.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Compiling Lexer</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Compiling Lexer</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Compiling Lexer</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compiling Lexer</Message>
+    </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

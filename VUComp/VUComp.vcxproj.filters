@@ -21,9 +21,13 @@
     <ClCompile Include="$(TargetDir)parse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="$(TargetDir)lex.yy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="parse.y" />
+    <CustomBuild Include="lex.l" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VUComp.h">
