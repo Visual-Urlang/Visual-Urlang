@@ -1,0 +1,8 @@
+version: 0.1.{build}
+
+image:
+  - Visual Studio 2019
+
+platform:
+  - x86
+  - x64

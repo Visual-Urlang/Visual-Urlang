@@ -1,5 +1,10 @@
 <img src="doc/urlang.png" height="120" align="right">
 
+[![Build Status][1]][2]
+
+[1]: https://img.shields.io/appveyor/ci/DangerRust/visual-urlang.svg
+[2]: https://ci.appveyor.com/project/DangerRust/visual-urlang
+
 Visual Urlang is a new programming language which is morally inspired Visual
 BASIC 6.0. 
 
@@ -15,12 +20,14 @@ Consider this Class Module with a Functor for example:
 Functor (T As Type)
 
 Public Function GetAT(ByVal a_t As T)
-    Dim AnonymousFunction = Function (ByVal a_t As T)
-                                Return a_t
-                            End
-    GetAT = local://AnonymousFunction(a_t)
+    Dim anonymous_function = Function (ByVal a_t As T)
+                                 Return a_t
+                             End Function
+    GetAT = local://anonymous_function(a_t)
 End Function
 ```
+
+There is documentation be created in the Docs: Read it [here](doc/README.md).
 
 ## Community
  - Contributors to Visual Urlang are welcomed.
