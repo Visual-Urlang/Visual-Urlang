@@ -1084,10 +1084,11 @@ symbol instead.",
         {
             if (rp->rhs[i] == sp)
             { /* FIX ME:  Deal with multiterminals */
-                ErrorMsg(lemp->filename,
-                         0, "The start symbol \"%s\" occurs on the \
+                ErrorMsg(lemp->filename, 0,
+                         "The start symbol \"%s\" occurs on the \
 right-hand side of a rule. This will result in a parser which \
-does not work properly.", sp->name);
+does not work properly.",
+                         sp->name);
                 lemp->errorcnt++;
             }
         }
@@ -6171,9 +6172,8 @@ void ReportTable(struct lemon *lemp,
         {
             fprintf(out, "    case %d: /* %s */\n", sp->index, sp->name);
             lineno++;
-            fprintf(out,
-                    "      yy_move<%s>(std::addressof(yyDest->yy%d), "
-                    "std::addressof(yySource->yy%d));\n",
+            fprintf(out, "      yy_move<%s>(std::addressof(yyDest->yy%d), "
+                         "std::addressof(yySource->yy%d));\n",
                     sp_datatype(lemp, sp), sp->dtnum, sp->dtnum);
             lineno++;
             fprintf(out, "      break;\n");
@@ -6194,9 +6194,8 @@ void ReportTable(struct lemon *lemp,
             sp->destructor = 0;
         }
     }
-    fprintf(out,
-            "      yy_move<%s>(std::addressof(yyDest->yy0), "
-            "std::addressof(yySource->yy0));\n",
+    fprintf(out, "      yy_move<%s>(std::addressof(yyDest->yy0), "
+                 "std::addressof(yySource->yy0));\n",
             lemp->tokentype);
     lineno++;
     fprintf(out, "      break;\n");
@@ -6223,9 +6222,8 @@ void ReportTable(struct lemon *lemp,
             }
         }
 
-        fprintf(out,
-                "      yy_move<%s>(std::addressof(yyDest->yy%d), "
-                "std::addressof(yySource->yy%d));\n",
+        fprintf(out, "      yy_move<%s>(std::addressof(yyDest->yy%d), "
+                     "std::addressof(yySource->yy%d));\n",
                 sp_datatype(lemp, sp), sp->dtnum, sp->dtnum);
         lineno++;
         fprintf(out, "      break;\n");

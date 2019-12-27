@@ -20,6 +20,8 @@ been included with this file.
 
 #include "defs.h"
 
+/* WSObject, WSClass, WSMethod, and WSProperty are all real WSOM objects. */
+
 struct WSObject
 {
     WSClassHdl cls;
@@ -34,10 +36,10 @@ struct WSClass
     /* name of the class */
     const char *szNam;
     /* pointer to std::vector<WSMethod *> */
-    void *pxMethVec;
-    void *pxPropVec;
+    void *pvecMethVec;
+    void *pvecPropVec;
     /* size of an instance */
-    WSInteger size;
+    WSInteger sSize;
 };
 
 struct WSMethod
@@ -53,5 +55,15 @@ struct WSProperty
     WSTypeSig szType;
     const char *szName;
 };
+
+/* A WSCallArgs instance */
+struct WSCallArgs
+{
+    WSClassHdl hdlCls;
+};
+
+/* Returns the method implementation for some method. */
+WSMethImpl wsGetMethod(WSObjectHdl hOn, WSMethName szMeth,
+                       WSCallForwarder *fnForwarder);
 
 #endif

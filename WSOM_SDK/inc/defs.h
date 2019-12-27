@@ -35,13 +35,23 @@ typedef WSLong WSCharacter;
 
 typedef struct WSDate
 {
-    WSLong date;
-    WSLong time;
+    WSLong iDate;
+    WSLong iTime;
 } WSDate;
 
 typedef struct WSObject *WSObjectHdl;
 typedef struct WSClass *WSClassHdl;
 
+typedef const char *WSMethName;
 typedef const char *WSTypeSig;
+
+#ifdef __cplusplus
+typedef void (*WSMethImpl)(...);
+#else
+typedef void (*WSMethImpl)();
+#endif
+
+/* Called obect, method name, and argument storage structure. */
+typedef void (*WSCallForwarder)(WSObjectHdl, WSMethName, void *);
 
 #endif
