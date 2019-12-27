@@ -63,7 +63,7 @@ struct WSCallArgs
 };
 
 /* Returns the method implementation for some method. */
-WSMethImpl wsGetMethod(WSObjectHdl hOn, WSMethName szMeth,
+WSOM_API WSMethImpl wsGetMethod(WSObjectHdl hOn, WSMethName szMeth,
                        WSCallForwarder *fnForwarder);
 
 #endif

@@ -1,0 +1,2 @@
+#define WSOM_API __declspec(dllexport)
+#define WSOM_API __declspec(dllimport)

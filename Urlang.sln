@@ -10,6 +10,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VUComp", "VUComp\VUComp.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lemon", "External\Lemon\Lemon.vcxproj", "{8E519D33-8C09-4195-9D67-AB559E8DDE1F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WSOM", "WSOM\WSOM.vcxproj", "{45747DFF-7CC3-4957-A307-22DC5D96C0D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +36,14 @@ Global
 		{8E519D33-8C09-4195-9D67-AB559E8DDE1F}.Release|x64.Build.0 = Release|x64
 		{8E519D33-8C09-4195-9D67-AB559E8DDE1F}.Release|x86.ActiveCfg = Release|Win32
 		{8E519D33-8C09-4195-9D67-AB559E8DDE1F}.Release|x86.Build.0 = Release|Win32
+		{45747DFF-7CC3-4957-A307-22DC5D96C0D4}.Debug|x64.ActiveCfg = Debug|x64
+		{45747DFF-7CC3-4957-A307-22DC5D96C0D4}.Debug|x64.Build.0 = Debug|x64
+		{45747DFF-7CC3-4957-A307-22DC5D96C0D4}.Debug|x86.ActiveCfg = Debug|Win32
+		{45747DFF-7CC3-4957-A307-22DC5D96C0D4}.Debug|x86.Build.0 = Debug|Win32
+		{45747DFF-7CC3-4957-A307-22DC5D96C0D4}.Release|x64.ActiveCfg = Release|x64
+		{45747DFF-7CC3-4957-A307-22DC5D96C0D4}.Release|x64.Build.0 = Release|x64
+		{45747DFF-7CC3-4957-A307-22DC5D96C0D4}.Release|x86.ActiveCfg = Release|Win32
+		{45747DFF-7CC3-4957-A307-22DC5D96C0D4}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

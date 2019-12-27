@@ -20,6 +20,18 @@ been included with this file.
 
 #include <stdint.h>
 
+// The following ifdef block is the standard way of creating macros which make exporting
+// from a DLL simpler. All files within this DLL are compiled with the WSOM_EXPORTS
+// symbol defined on the command line. This symbol should not be defined on any project
+// that uses this DLL. This way any other project whose source files include this file see
+// WSOM_API functions as being imported from a DLL, whereas this DLL sees symbols
+// defined with this macro as being exported.
+#ifdef WSOM_EXPORTS
+#define WSOM_API __declspec(dllexport)
+#else
+#define WSOM_API __declspec(dllimport)
+#endif
+
 #define WSFALSE 0
 #define WSTRUE 1
 
