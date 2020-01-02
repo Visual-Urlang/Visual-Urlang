@@ -22,8 +22,9 @@
     <VCProjectVersion>16.0</VCProjectVersion>
     <ProjectGuid>{033D7F4D-01E4-4D35-B31B-93A48CCFBD45}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>VUComp</RootNamespace>
+    <RootNamespace>VUC</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>VUC</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

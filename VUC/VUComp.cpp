@@ -29,8 +29,13 @@ int main(int argc, char *argv[])
         }
     }
 
-    for (auto mod : modNames)
-        std::cout << mod + "\n";
+    if (!modNames.size())
+        std::cout << "Usage: " + std::string(argv[0]) + " [ options ] modules\n";
+
+        for (auto mod : modNames)
+            std::cout << mod + "\n";
+
+        std::cout << "\n";
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
