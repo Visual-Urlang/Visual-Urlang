@@ -1,12 +1,11 @@
-<img src="doc/urlang.png" height="120" align="right">
+<img src="Docs/urlang.png" height="120" align="right">
 
 [![Build Status][1]][2]
 
 [1]: https://img.shields.io/appveyor/ci/DangerRust/visual-urlang.svg
 [2]: https://ci.appveyor.com/project/DangerRust/visual-urlang
 
-Visual Urlang is a new programming language which is morally inspired Visual
-BASIC 6.0. 
+Visual Urlang is a new programming language in the BASIC family.
 
 ## Outline.
 
@@ -27,15 +26,18 @@ Public Function GetAT(ByVal a_t As T)
 End Function
 ```
 
-There is documentation be created in the Docs: Read it [here](doc/README.md).
+There is documentation be created in the Docs: Read it [here](Docs/README.md).
 
 ## Community
- - Contributors to Visual Urlang are welcomed.
- - Contributors should behave in a Christian way.
+Contributors to Visual Urlang are welcomed. There is no formal code of conduct.
+Anyone who wants to participate in the community should behave in a Christian
+way. If you are respectful and do not act egotistically, you are welcome to be
+part of the Visual Urlang community, regardless of your religion or other
+characteristics.
 
 ## Copying
-Visual Urlang is proprietary software. Licensing terms are detailed in the
-End-User License Agreement, available in the file [EULA.md](EULA.md).
+Visual Urlang is open source, the software is available under the Creative Commons
+CC-NC-SA 4.0 license. Please find a copy of the license in the file [EULA.md](EULA.md).
 
 The WSOM SDK is licensed under the Common Distribution and Development License
 (CDDL) version 1.1. Details are found in the file [WSOM_SDK/COPYING.md](WSOM_SDK/COPYING.md).

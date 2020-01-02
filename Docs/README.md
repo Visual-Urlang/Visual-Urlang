@@ -1,4 +1,4 @@
-<img src="doc/urlang.png" height="120" align="right">
+<img src="Docs/urlang.png" height="120" align="right">
 
 # Visual Urlang Reference Manual
 
