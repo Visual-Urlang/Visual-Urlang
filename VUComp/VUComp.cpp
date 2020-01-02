@@ -3,8 +3,35 @@
 //
 
 #include <iostream>
+#include <vector>
 
-int main() { std::cout << "Hello World!\n"; }
+#include "version.h"
+
+int main(int argc, char *argv[])
+{
+    std::vector<std::string> modNames;
+
+    std::cout
+        << "Visual Urlang (TM) Compiler version " VERSTR "\n"
+           "Copyright (C) The Visual Urlang Project. All rights reserved.\n"
+           "Use is subject to license terms.\n\n";
+
+    for (int i = 1; i < argc; ++i)
+    {
+        std::string arg = argv[i];
+        if (!arg.rfind("-", 0))
+        {
+            /* option */
+        }
+        else
+        {
+            modNames.push_back(arg);
+        }
+    }
+
+    for (auto mod : modNames)
+        std::cout << mod + "\n";
+}
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
 // Debug program: F5 or Debug > Start Debugging menu
