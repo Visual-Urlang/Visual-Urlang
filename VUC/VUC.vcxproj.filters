@@ -36,5 +36,8 @@
     <ClInclude Include="VUComp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="$(TargetDir)lex.yy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

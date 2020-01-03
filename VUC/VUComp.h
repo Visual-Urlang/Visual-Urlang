@@ -21,7 +21,6 @@ the file "EULA.md", which should have been included with this file.
 
 struct Token
 {
-
     Token() = default;
     Token(const Token &) = default;
     Token(Token &&) = default;
@@ -39,12 +38,31 @@ struct Token
 
 class VU_Parser : public lemon_base<Token>
 {
+  protected:
+    std::string fName;
+    std::string &fText;
+    int m_line = 0, m_col = 0, m_pos = 0;
+
   public:
     using lemon_base::parse;
+
+    static VU_Parser *create(std::string fName, std::string &fText);
+
+    VU_Parser(std::string f, std::string &ft) : fName(f), fText(ft) {}
+
     void parse(int major) { parse(major, Token{}); }
 
     template <class T> void parse(int major, T &&t)
     {
         parse(major, Token(std::forward<T>(t)));
     }
+
+    /* line tracking */
+    void cr()
+    {
+        m_pos += m_col + 1;
+        m_line++;
+        m_col = 0;
+    }
+    void incCol() { m_col++; }
 };

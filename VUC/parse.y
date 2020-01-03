@@ -1,15 +1,55 @@
 %include{
+#include <iostream>
+
 #include "VUComp.h"
 
 #define LEMON_SUPER VU_Parser
 }
 
+
+%code {
+
+VU_Parser * VU_Parser::create(std::string fName, std::string & fText)
+{
+	return new yypParser(fName, fText);
+}
+}
+
+%syntax_error {
+	const YYACTIONTYPE stateno = yytos->stateno;
+	size_t eolPos = fText.find("\n", m_pos);
+	std::string eLine = fText.substr(m_pos, eolPos - m_pos);
+
+	std::cerr << "vuc: " << fName << "(" << std::to_string(m_line) + "," 
+			  << std::to_string(m_col) << "): "
+			  << "Error V1001: Syntax error: unexpected " 
+			  << yyTokenName[yymajor] << "\n";
+
+	std::cerr << "+ " << eLine << "\n";
+	std::cerr << "+ ";
+	for (int i = 1; i < m_col; i++)
+		std::cerr << " ";
+	std::cerr << "^";
+
+	std::cerr << "\n\texpected one of: \n";
+
+	for (unsigned i = 0; i < YYNTOKEN; ++i)
+	{
+		int yyact = yy_find_shift_action(i, stateno);
+		if (yyact != YY_ERROR_ACTION && yyact != YY_NO_ACTION)
+			std::cerr << "\t" << yyTokenName[i] << "\n";
+	}
+
+}
+
+
 %token_type    {Token}
+%token_prefix  TOK_
 
 %left COMMA.
 %left LBRACKET LSBRACKET RBRACKET RSBRACKET.
 
-file ::= statement_list.
+file ::= statement_list EOF.
 
 statement_break ::= EOL.
 
