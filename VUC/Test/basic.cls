@@ -1,4 +1,1 @@
-
-       [ This is not appropriate ]
-
-This is not iether
+x = ( *t) 5;
