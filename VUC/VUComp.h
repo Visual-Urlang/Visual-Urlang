@@ -57,6 +57,8 @@ class VU_Parser : public lemon_base<Token>
         parse(major, Token(std::forward<T>(t)));
     }
 
+    virtual void trace(FILE *, const char *) = 0;
+
     /* line tracking */
     void cr()
     {

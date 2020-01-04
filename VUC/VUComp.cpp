@@ -45,6 +45,7 @@ void parseFile(std::string fName)
     }
 
     parser = VU_Parser::create(fName, src);
+    parser->trace(stdout, "<parser>: ");
 
     vuclex_init_extra(parser, &scanner);
     /* Now we need to scan our string into the buffer. */

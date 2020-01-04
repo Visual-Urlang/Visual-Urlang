@@ -37,6 +37,8 @@ COMMENT \"(\\.|[^"])*\"
 
 %%
 
+"call"          { yyextra->parse(TOK_CALL); }
+
 
 ">>="			{ return(TOK_RIGHT_ASSIGN); }
 "<<="			{ return(TOK_LEFT_ASSIGN); }
@@ -70,7 +72,9 @@ COMMENT \"(\\.|[^"])*\"
 "/"                { yyextra->parse(TOK_FSLASH); }
 "."                { yyextra->parse(TOK_DOT); }
 "="                { yyextra->parse(TOK_EQUALS); }
+","                { yyextra->parse(TOK_COMMA); }
 
+([0-9]+)                        { yyextra->parse(TOK_CONSTANT); }
 (:?{LTR})(:?{LTR}|{DIGIT}|::)* { yyextra->parse(TOK_IDENTIFIER, yytext); }
 
 

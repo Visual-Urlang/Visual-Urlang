@@ -46,6 +46,8 @@ VU_Parser * VU_Parser::create(std::string fName, std::string & fText)
 %token_type    {Token}
 %token_prefix  TOK_
 
+%token CALL.
+
 %left COMMA.
 %right EQUALS.
 %right RIGHT_ASSIGN LEFT_ASSIGN MOD_ASSIGN DIV_ASSIGN MUL_ASSIGN.
@@ -73,8 +75,8 @@ statement_break ::= EOL.
 statement_list ::= statement statement_break.
 statement_list ::= statement_list statement statement_break.
 
-statement ::= expr.
-statement ::= assign_expr argument_expr_list. [UN]
+statement ::= primary_expr.
+statement ::= primary_expr argument_expr_list.
 
 primary_expr
 	::= IDENTIFIER.
@@ -100,7 +102,7 @@ postfix_expr
 postfix_expr
 	::= postfix_expr INC_OP. 
 postfix_expr
-	::= postfix_expr DEC_OP. 
+	::= postfix_expr DEC_OP.
 
 argument_expr_list
 	::= assign_expr.
@@ -118,6 +120,16 @@ unary_expr
 
 unary_operator
 	::= EXCLAMATION.
+unary_operator	
+	::= AND.	
+unary_operator	
+	::= STAR.	
+unary_operator	
+	::= PLUS.	
+unary_operator	
+	::= MINUS.	
+unary_operator	
+	::= TILDE.
 
 cast_expr
 	::= unary_expr.
@@ -174,7 +186,6 @@ excl_or_expr
 	::= and_expr.
 excl_or_expr
 	::= excl_or_expr HAT and_expr.
-
 
 incl_or_expr
 	::= excl_or_expr.
