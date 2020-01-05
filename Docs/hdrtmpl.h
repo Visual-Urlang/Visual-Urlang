@@ -10,7 +10,7 @@ the file "EULA.md", which should have been included with this file.
 
         Copyright Notice
 
-    (c) 2019 The Visual Urlang Project.
+    (c) 2020 The Visual Urlang Project.
               All rights reserved.
 ********************************************************************/
 

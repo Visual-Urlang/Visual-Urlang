@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "VUComp.h"
+#include "AST/IdExpr.h"
 
 #define LEMON_SUPER VU_Parser
 }
@@ -13,6 +14,13 @@ VU_Parser * VU_Parser::create(std::string fName, std::string & fText)
 {
 	return new yypParser(fName, fText);
 }
+
+Position VU_Parser::pos()
+{
+		yypParser *self = (yypParser *)this;
+	return Position(self->m_line, self->m_col, self->m_pos);
+}
+
 }
 
 %syntax_error {
@@ -68,6 +76,8 @@ VU_Parser * VU_Parser::create(std::string fName, std::string & fText)
 
 %right DOTACCESS.
 
+%default_type { Node * }
+
 file ::= statement_list EOF.
 
 statement_break ::= EOL.
@@ -75,11 +85,13 @@ statement_break ::= EOL.
 statement_list ::= statement statement_break.
 statement_list ::= statement_list statement statement_break.
 
-statement ::= primary_expr.
-statement ::= primary_expr argument_expr_list.
+statement ::= dotaccess_expr.
+statement ::= dotaccess_expr argument_expr_list.
 
-primary_expr
-	::= IDENTIFIER.
+%type primary_expr { Expr * }
+
+primary_expr(e)
+	::= IDENTIFIER(I). { e = new IdentExpr(pos(), I.stringValue); }
 primary_expr
 	::= CONSTANT.
 primary_expr
@@ -87,16 +99,19 @@ primary_expr
 primary_expr
 	::= LBRACKET expr RBRACKET.
 
-postfix_expr
+dotaccess_expr
 	::= primary_expr.
+dotaccess_expr
+	::= dotaccess_expr DOT IDENTIFIER. [DOTACCESS]
+
+postfix_expr
+	::= dotaccess_expr.
 postfix_expr
 	::= postfix_expr LSBRACKET expr RSBRACKET. [UN]
 postfix_expr
 	::= postfix_expr LBRACKET RBRACKET. [UN]
 postfix_expr
 	::= postfix_expr LBRACKET argument_expr_list RBRACKET. [UN]
-postfix_expr
-	::= postfix_expr DOT IDENTIFIER. [DOTACCESS]
 postfix_expr
 	::= postfix_expr PTR_OP IDENTIFIER. [DOTACCESS]
 postfix_expr

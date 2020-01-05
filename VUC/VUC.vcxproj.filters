@@ -16,6 +16,9 @@
     <Filter Include="Generated Files">
       <UniqueIdentifier>{bc8ca08a-cc7a-4953-83b1-337640ef7616}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\AST">
+      <UniqueIdentifier>{5c1930da-e764-4681-b724-7b25b6337b96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="VUComp.cpp">
@@ -38,6 +41,18 @@
     </ClInclude>
     <ClInclude Include="$(TargetDir)lex.yy.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Node.h">
+      <Filter>Header Files\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Position.h">
+      <Filter>Header Files\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Expr.h">
+      <Filter>Header Files\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\IdExpr.h">
+      <Filter>Header Files\AST</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

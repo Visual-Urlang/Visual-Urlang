@@ -5,9 +5,8 @@
 These coded instructions, statements, and computer programs contain
 proprietary information of the Visual Urlang project, and are protected
 under copyright law. They may not be distributed, copied, or used except
-under the provisions of the terms of the Common Development and
-Distribution License, in the file "COPYING.md", which should have
-been included with this file.
+under the provisions of the terms of the End-User License Agreement, in
+the file "EULA.md", which should have been included with this file.
 
         Copyright Notice
 
@@ -16,3 +15,11 @@ been included with this file.
 ********************************************************************/
 
 #pragma once
+
+#include "Node.h"
+
+class Expr : public Node
+{
+  public:
+    explicit Expr(Position pos) : Node(pos) {}
+};

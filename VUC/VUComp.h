@@ -16,8 +16,10 @@ the file "EULA.md", which should have been included with this file.
 
 #pragma once
 
-#include "Lemon/lemon_base.h"
 #include <string>
+
+#include "AST/Position.h"
+#include "Lemon/lemon_base.h"
 
 struct Token
 {
@@ -44,6 +46,9 @@ class VU_Parser : public lemon_base<Token>
     int m_line = 0, m_col = 0, m_pos = 0;
 
   public:
+    int line() const;
+    int col() const;
+    int pos1() const;
     using lemon_base::parse;
 
     static VU_Parser *create(std::string fName, std::string &fText);
@@ -57,6 +62,8 @@ class VU_Parser : public lemon_base<Token>
         parse(major, Token(std::forward<T>(t)));
     }
 
+    Position pos();
+
     virtual void trace(FILE *, const char *) = 0;
 
     /* line tracking */
@@ -68,3 +75,9 @@ class VU_Parser : public lemon_base<Token>
     }
     void incCol() { m_col++; }
 };
+
+inline int VU_Parser::line() const { return m_line; }
+
+inline int VU_Parser::col() const { return m_col; }
+
+inline int VU_Parser::pos1() const { return m_pos; }
