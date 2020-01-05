@@ -4,18 +4,26 @@
 
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
 
-#include "version.h"
 #include "VUComp.h"
+#include "version.h"
 
 #include "parse.h"
 #define YY_NO_UNISTD_H
 #include "lex.yy.h"
 
+static enum FlagVal {
+    evTraceFlag,
+};
 
-void parseFile(std::string fName)
+static std::map<std::string, FlagVal> flagVals;
+
+static void initFlagVals();
+
+void parseFile(bool trace, std::string fName)
 {
     VU_Parser *parser;
     std::string src;
@@ -45,7 +53,8 @@ void parseFile(std::string fName)
     }
 
     parser = VU_Parser::create(fName, src);
-    parser->trace(stdout, "<parser>: ");
+    if (trace)
+        parser->trace(stdout, "<parser>: ");
 
     vuclex_init_extra(parser, &scanner);
     /* Now we need to scan our string into the buffer. */
@@ -59,6 +68,7 @@ void parseFile(std::string fName)
 int main(int argc, char *argv[])
 {
     std::vector<std::string> modNames;
+    bool trace = false;
 
     std::cout
         << "Visual Urlang (TM) Compiler version " VERSTR "\n"
@@ -71,6 +81,12 @@ int main(int argc, char *argv[])
         if (!arg.rfind("-", 0))
         {
             /* option */
+            switch (flagVals[arg.substr((1))])
+            {
+            case evTraceFlag:
+                trace = true;
+                break;
+            }
         }
         else
         {
@@ -78,28 +94,17 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (!modNames.size())
+    if (modNames.empty())
         std::cout << "Usage: " + std::string(argv[0]) +
                          " [ options ] modules\n";
 
     for (auto mod : modNames)
     {
         std::cout << mod + "\n";
-        parseFile(mod);
+        parseFile(trace, mod);
     }
 
     std::cout << "\n";
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started:
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add
-//   Existing Item to add existing code files to the project 6. In the future,
-//   to open this project again, go to File > Open > Project and select the .sln
-//   file
+void initFlagVals() { flagVals["trace"] = evTraceFlag; }
