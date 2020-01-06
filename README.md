@@ -7,6 +7,15 @@
 
 Visual Urlang is a new programming language in the BASIC family.
 
+## Warning
+
+I am write now a new compiler for Visual Urlang which is powered by LEMON
+Compiler-Compiler, FLEX lexer, and to have LLVM backend. This is to replace my
+old compiler with old-fashioned hand written parser and C code output.
+
+The new compiler it is not ready for use yet, neither is most of the
+documentation written yet.
+
 ## Outline.
 
 Visual Urlang builds on the Web Scale Object Model (WSOM) and includes features
@@ -26,7 +35,8 @@ Public Function GetAT(ByVal a_t As T)
 End Function
 ```
 
-There is documentation be created in the Docs: Read it [here](Docs/README.md).
+There is a documentation, the *Visual Urlang Programmer's Manual*. Read it
+[here](https://visual-urlang.readthedocs.io/en/latest/)!
 
 ## Community
 Contributors to Visual Urlang are welcomed. There is no formal code of conduct.
