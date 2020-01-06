@@ -183,6 +183,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AST\Constant.h" />
     <ClInclude Include="AST\Expr.h" />
     <ClInclude Include="AST\IdExpr.h" />
     <ClInclude Include="AST\Node.h" />

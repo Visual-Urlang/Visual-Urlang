@@ -74,12 +74,13 @@ COMMENT \"(\\.|[^"])*\"
 "="                { yyextra->parse(TOK_EQUALS); }
 ","                { yyextra->parse(TOK_COMMA); }
 
-([0-9]+)                        { yyextra->parse(TOK_CONSTANT); }
+([0-9]+)                        { yyextra->parse(TOK_INTCONSTANT, std::stoi(yytext)); }
 (:?{LTR})(:?{LTR}|{DIGIT}|::)* { yyextra->parse(TOK_IDENTIFIER, yytext); }
 
 
 "'"[^\n\r]*         { }
 
+"_"{NEWLINE}        { /* line continuation */ }
 {NEWLINE}           { yyextra->parse(TOK_EOL); }
 
 [ \t\n\r]+          {}

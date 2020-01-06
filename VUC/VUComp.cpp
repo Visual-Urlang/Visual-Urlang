@@ -16,6 +16,7 @@
 #include "lex.yy.h"
 
 static enum FlagVal {
+    evNonFlag,
     evTraceFlag,
 };
 
@@ -75,16 +76,21 @@ int main(int argc, char *argv[])
            "Copyright (C) The Visual Urlang Project. All rights reserved.\n"
            "Use is subject to license terms.\n\n";
 
+    initFlagVals();
+
     for (int i = 1; i < argc; ++i)
     {
         std::string arg = argv[i];
         if (!arg.rfind("-", 0))
         {
+            std::cout << "Hello" << arg.substr((1)) << std::endl;
             /* option */
             switch (flagVals[arg.substr((1))])
             {
             case evTraceFlag:
                 trace = true;
+                break;
+            default:
                 break;
             }
         }

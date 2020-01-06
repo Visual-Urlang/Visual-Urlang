@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "VUComp.h"
+#include "AST/Constant.h"
 #include "AST/IdExpr.h"
 
 #define LEMON_SUPER VU_Parser
@@ -88,16 +89,23 @@ statement_list ::= statement_list statement statement_break.
 statement ::= dotaccess_expr.
 statement ::= dotaccess_expr argument_expr_list.
 
+
+
+%type constant { Constant * }
+
+constant(C)
+	::= INTCONSTANT(i). { C = new Constant(pos(), i.intValue); }
+
 %type primary_expr { Expr * }
 
-primary_expr(e)
-	::= IDENTIFIER(I). { e = new IdentExpr(pos(), I.stringValue); }
+primary_expr(E)
+	::= IDENTIFIER(i). { E = new IdentExpr(pos(), i.stringValue); }
 primary_expr
-	::= CONSTANT.
+	::= constant.
 primary_expr
 	::= STRING_LITERAL.
-primary_expr
-	::= LBRACKET expr RBRACKET.
+primary_expr(E)
+	::= LBRACKET expr(e) RBRACKET. { E = e; }
 
 dotaccess_expr
 	::= primary_expr.
@@ -249,6 +257,8 @@ assign_op
 	::= XOR_ASSIGN. [EQUALS]
 assign_op
 	::= OR_ASSIGN. [EQUALS]
+
+%type expr { Expr * }
 
 expr
 	::= assign_expr.

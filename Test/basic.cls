@@ -1,2 +1,2 @@
-call do 5 + 6, 7
-call do.this 1++, 2, hello.world
+call do 5 + 6, 7 _
+, 1++, 241, hello.world
