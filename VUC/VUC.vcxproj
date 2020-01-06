@@ -186,8 +186,10 @@
     <ClInclude Include="AST\Constant.h" />
     <ClInclude Include="AST\Expr.h" />
     <ClInclude Include="AST\IdExpr.h" />
+    <ClInclude Include="AST\Module.h" />
     <ClInclude Include="AST\Node.h" />
     <ClInclude Include="AST\Position.h" />
+    <ClInclude Include="AST\Stmt.h" />
     <ClInclude Include="VUComp.h" />
     <ClInclude Include="$(TargetDir)lex.yy.h" />
   </ItemGroup>

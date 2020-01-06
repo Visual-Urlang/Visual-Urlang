@@ -57,5 +57,11 @@
     <ClInclude Include="AST\Constant.h">
       <Filter>Header Files\AST</Filter>
     </ClInclude>
+    <ClInclude Include="AST\Module.h">
+      <Filter>Header Files\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Stmt.h">
+      <Filter>Header Files\AST</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

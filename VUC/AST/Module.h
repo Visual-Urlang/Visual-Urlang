@@ -16,32 +16,13 @@ the file "EULA.md", which should have been included with this file.
 
 #pragma once
 
-#include <string>
-
 #include "Node.h"
 
-class Constant : public Node
+class Module : public Node
 {
-  protected:
-    enum ConstantType
+    enum ModType
     {
-        evInt,
-        evString,
-    } m_constType;
-
-    union {
-        int m_intValue;
-        std::string m_strValue;
+        evMod,
+        evClass,
     };
-
-  public:
-    Constant(Position pos, int intValue)
-        : Node(pos), m_intValue(intValue), m_constType(evInt)
-    {
-    }
-
-    Constant(Position pos, std::string strValue)
-        : Node(pos), m_strValue(strValue), m_constType(evInt)
-    {
-    }
 };

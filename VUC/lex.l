@@ -26,6 +26,8 @@
             yyextra->incCol(); \
     }
 
+#define prs(x) yyextra->parse(TOK_##x)
+
 %}
 
 DIGIT ([0-9])
@@ -37,7 +39,11 @@ COMMENT \"(\\.|[^"])*\"
 
 %%
 
-"call"          { yyextra->parse(TOK_CALL); }
+"As"            { prs(AS); }
+"Dim"           { prs(DIM); }
+"Call"          { yyextra->parse(TOK_CALL); }
+
+"Integer"       { prs(INTEGER); }
 
 
 ">>="			{ return(TOK_RIGHT_ASSIGN); }

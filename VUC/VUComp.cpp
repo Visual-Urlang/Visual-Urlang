@@ -26,6 +26,8 @@ static void initFlagVals();
 
 void parseFile(bool trace, std::string fName)
 {
+    bool isCls = fName.substr(fName.size() - 3) == "cls";
+
     VU_Parser *parser;
     std::string src;
     std::ifstream f;
@@ -60,6 +62,8 @@ void parseFile(bool trace, std::string fName)
     vuclex_init_extra(parser, &scanner);
     /* Now we need to scan our string into the buffer. */
     yyb = vuc_scan_string(src.c_str(), scanner);
+
+    parser->parse(isCls ? TOK_CLASS : TOK_BAS);
 
     while (vuclex(scanner))
         ;

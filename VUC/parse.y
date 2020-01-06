@@ -4,6 +4,7 @@
 #include "VUComp.h"
 #include "AST/Constant.h"
 #include "AST/IdExpr.h"
+#include "AST/Stmt.h"
 
 #define LEMON_SUPER VU_Parser
 }
@@ -79,24 +80,70 @@ Position VU_Parser::pos()
 
 %default_type { Node * }
 
-file ::= statement_list EOF.
+file ::= module EOF.
 
-statement_break ::= EOL.
+module
+	::= CLASS cls_decl_list.
+module
+	::= BAS bas_decl_list.
 
-statement_list ::= statement statement_break.
-statement_list ::= statement_list statement statement_break.
+cls_decl_list
+	::= cls_decl EOL.
+cls_decl_list
+	::= cls_decl_list cls_decl EOL.
+bas_decl_list
+	::= .
 
-statement ::= dotaccess_expr.
-statement ::= dotaccess_expr argument_expr_list.
+cls_decl
+	::= block_stmt.
 
+block_stmt ::= variable_stmt.
+block_stmt ::= bracketed_expr.
+block_stmt ::= dotaccess_expr argument_expr_list.
 
+visibility_spec
+	::= DIM.
+visibility_spec
+	::= PRIVATE.
+
+variable_stmt
+	::= visibility_spec variable_stmt_els.
+
+variable_stmt_els
+	::= variable_decl_part.
+variable_stmt_els
+	::= variable_stmt_els COMMA variable_decl_part.
+
+variable_decl_part
+	::= IDENTIFIER opt_subscripts AS type_name opt_initialiser.
+
+opt_initialiser
+	::= .
+opt_initialiser
+	::= EQUALS expr.
+
+opt_subscripts
+	::= .
+opt_subscripts
+	::= subscripts.
+
+subscripts
+	::= subscript.
+subscripts
+	::= subscripts subscript.
+
+subscript ::= LBRACKET INTCONSTANT RBRACKET.
 
 %type constant { Constant * }
 
 constant(C)
 	::= INTCONSTANT(i). { C = new Constant(pos(), i.intValue); }
 
+%type bracketed_expr { Expr * }
 %type primary_expr { Expr * }
+
+bracketed_expr
+	::= LBRACKET expr(e) RBRACKET.
 
 primary_expr(E)
 	::= IDENTIFIER(i). { E = new IdentExpr(pos(), i.stringValue); }
@@ -105,7 +152,7 @@ primary_expr
 primary_expr
 	::= STRING_LITERAL.
 primary_expr(E)
-	::= LBRACKET expr(e) RBRACKET. { E = e; }
+	::= bracketed_expr(e). { E = e; }
 
 dotaccess_expr
 	::= primary_expr.
@@ -266,4 +313,4 @@ expr
 	::= expr COMMA assign_expr.
 
 type_name
-	::= TYPE.
+	::= INTEGER.
