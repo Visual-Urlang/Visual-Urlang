@@ -87,7 +87,6 @@ int main(int argc, char *argv[])
         std::string arg = argv[i];
         if (!arg.rfind("-", 0))
         {
-            std::cout << "Hello" << arg.substr((1)) << std::endl;
             /* option */
             switch (flagVals[arg.substr((1))])
             {

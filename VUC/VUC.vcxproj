@@ -190,6 +190,9 @@
     <ClInclude Include="AST\Node.h" />
     <ClInclude Include="AST\Position.h" />
     <ClInclude Include="AST\Stmt.h" />
+    <ClInclude Include="AST\Type.h" />
+    <ClInclude Include="AST\TypeLoc.h" />
+    <ClInclude Include="AST\TypeRepr.h" />
     <ClInclude Include="VUComp.h" />
     <ClInclude Include="$(TargetDir)lex.yy.h" />
   </ItemGroup>

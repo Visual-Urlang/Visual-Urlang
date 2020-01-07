@@ -5,6 +5,7 @@
 #include "AST/Constant.h"
 #include "AST/IdExpr.h"
 #include "AST/Stmt.h"
+#include "AST/TypeLoc.h"
 
 #define LEMON_SUPER VU_Parser
 }
@@ -186,7 +187,7 @@ unary_expr
 unary_expr
 	::= SIZEOF unary_expr. [UN]
 unary_expr
-	::= SIZEOF LBRACKET type_name RBRACKET. [UN]
+	::= SIZEOF LCARET type_name RCARET. [UN]
 
 unary_operator
 	::= EXCLAMATION.
@@ -204,7 +205,7 @@ unary_operator
 cast_expr
 	::= unary_expr.
 cast_expr
-	::= LBRACKET type_name RBRACKET cast_expr. [UNA]
+	::= LCARET type_name RCARET cast_expr. [UNA]
 
 mul_expr
 	::= cast_expr.
@@ -312,5 +313,30 @@ expr
 expr
 	::= expr COMMA assign_expr.
 
+%type primary_type_name { TypeRepr * }
+%type type_name { TypeRepr * }
+
+primary_type_name(T)
+	::= INTEGER. { T = new BuiltinTypeRepr(pos(), BuiltinTypeRepr::evInteger); }
+primary_type_name(T)
+	::= IDENTIFIER(i). { T = new IdTypeRepr(pos(), i.stringValue); }
+primary_type_name(T)
+	::= LBRACKET type_name(t) RBRACKET. { T = t; }
+
+generic_type_binding
+	::= primary_type_name.
+generic_type_binding
+	::= primary_type_name LBRACKET type_name_list RBRACKET.
+
+postfix_type_name
+	::= generic_type_binding DOT generic_type_binding .
+postfix_type_name
+	::= generic_type_binding .
+
+type_name_list
+	::= type_name.
+type_name_list
+	::= type_name_list COMMA type_name.
+
 type_name
-	::= INTEGER.
+	::= postfix_type_name.

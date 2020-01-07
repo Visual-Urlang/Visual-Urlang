@@ -63,5 +63,14 @@
     <ClInclude Include="AST\Stmt.h">
       <Filter>Header Files\AST</Filter>
     </ClInclude>
+    <ClInclude Include="AST\Type.h">
+      <Filter>Header Files\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\TypeRepr.h">
+      <Filter>Header Files\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\TypeLoc.h">
+      <Filter>Header Files\AST</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
