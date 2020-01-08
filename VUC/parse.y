@@ -1,11 +1,13 @@
 %include{
 #include <iostream>
+#include <list>
 
 #include "VUComp.h"
 #include "AST/Constant.h"
 #include "AST/IdExpr.h"
 #include "AST/Stmt.h"
 #include "AST/TypeLoc.h"
+#include "AST/FunCallE.h"
 
 #define LEMON_SUPER VU_Parser
 }
@@ -84,9 +86,17 @@ Position VU_Parser::pos()
 file ::= module EOF.
 
 module
-	::= CLASS cls_decl_list.
+	::= CLASS opt_signature cls_decl_list.
 module
 	::= BAS bas_decl_list.
+
+opt_signature
+	::= signature.
+opt_signature
+	::= .
+
+signature
+	::= SIGNATURE.
 
 cls_decl_list
 	::= cls_decl EOL.
@@ -142,9 +152,11 @@ constant(C)
 
 %type bracketed_expr { Expr * }
 %type primary_expr { Expr * }
+%type postfix_expr { Expr * }
 
-bracketed_expr
+bracketed_expr(E)
 	::= LBRACKET expr(e) RBRACKET.
+	{ E = e; }
 
 primary_expr(E)
 	::= IDENTIFIER(i). { E = new IdentExpr(pos(), i.stringValue); }
@@ -164,10 +176,16 @@ postfix_expr
 	::= dotaccess_expr.
 postfix_expr
 	::= postfix_expr LSBRACKET expr RSBRACKET. [UN]
-postfix_expr
-	::= postfix_expr LBRACKET RBRACKET. [UN]
-postfix_expr
-	::= postfix_expr LBRACKET argument_expr_list RBRACKET. [UN]
+postfix_expr(P)
+	::= postfix_expr(e) LBRACKET RBRACKET. [UN]
+	{
+		P = new FunCallExpr(pos(), e, {});
+	}
+postfix_expr(P)
+	::= postfix_expr(e) LBRACKET argument_expr_list(l) RBRACKET. [UN]
+	{
+		P = new FunCallExpr(pos(), e, l);
+	}
 postfix_expr
 	::= postfix_expr PTR_OP IDENTIFIER. [DOTACCESS]
 postfix_expr
@@ -175,10 +193,26 @@ postfix_expr
 postfix_expr
 	::= postfix_expr DEC_OP.
 
-argument_expr_list
-	::= assign_expr.
-argument_expr_list
-	::= argument_expr_list COMMA assign_expr.
+%type argument_expr_list { std::list<Expr *> }
+
+argument_expr_list(L)
+	::= assign_expr(e). { L = std::list<Expr *>({e}); }
+argument_expr_list(L)
+	::= argument_expr_list(l) COMMA assign_expr(e). { (L=l).push_back (e); }
+
+%type unary_expr { Expr * }
+%type cast_expr { Expr * }
+%type mul_expr { Expr * }
+%type add_expr { Expr * }
+%type shift_expr { Expr * }
+%type rel_expr { Expr * }
+%type eq_expr { Expr * }
+%type excl_or_expr { Expr * }
+%type incl_or_expr { Expr * }
+%type log_and_expr { Expr * }
+%type log_or_expr { Expr *}
+%type cond_expr { Expr * }
+%type assign_expr { Expr * }
 
 unary_expr
 	::= postfix_expr.

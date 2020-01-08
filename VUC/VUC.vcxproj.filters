@@ -72,5 +72,8 @@
     <ClInclude Include="AST\TypeLoc.h">
       <Filter>Header Files\AST</Filter>
     </ClInclude>
+    <ClInclude Include="AST\FunCallE.h">
+      <Filter>Header Files\AST</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
