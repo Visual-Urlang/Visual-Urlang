@@ -44,6 +44,7 @@ class VU_Parser : public lemon_base<Token>
     std::string fName;
     std::string &fText;
     int m_line = 0, m_col = 0, m_pos = 0;
+    int m_oldLine = 0, m_oldCol = 0, m_oldPos = 0;
 
   public:
     int line() const;
@@ -67,6 +68,13 @@ class VU_Parser : public lemon_base<Token>
     virtual void trace(FILE *, const char *) = 0;
 
     /* line tracking */
+    void recOldPos()
+    {
+        m_oldPos = m_pos;
+        m_oldLine = m_line;
+        m_oldCol = m_col;
+    }
+
     void cr()
     {
         m_pos += m_col + 1;

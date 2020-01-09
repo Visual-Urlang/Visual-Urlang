@@ -3,7 +3,7 @@
 #include "parse.h"
 
 #define YY_NO_UNISTD_H
-#define isatty() NULL
+#define isatty(X) NULL
 %}
 
 %option noyywrap
@@ -16,6 +16,7 @@
 %{
 
 #define YY_USER_ACTION \
+    yyextra->recOldPos(); \
     for(int i = 0; yytext[i] != '\0'; i++) \
     { \
         if(yytext[i] == '\n') \

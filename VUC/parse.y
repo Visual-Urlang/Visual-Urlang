@@ -22,8 +22,8 @@ VU_Parser * VU_Parser::create(std::string fName, std::string & fText)
 
 Position VU_Parser::pos()
 {
-		yypParser *self = (yypParser *)this;
-	return Position(self->m_line, self->m_col, self->m_pos);
+	yypParser *self = (yypParser *)this;
+	return Position(self->m_oldLine, self->m_oldCol, self->m_oldPos, self->m_line, self->m_col, self->m_pos);
 }
 
 }
@@ -32,6 +32,7 @@ Position VU_Parser::pos()
 	const YYACTIONTYPE stateno = yytos->stateno;
 	size_t eolPos = fText.find("\n", m_pos);
 	std::string eLine = fText.substr(m_pos, eolPos - m_pos);
+	size_t i;
 
 	std::cerr << "vuc: " << fName << "(" << std::to_string(m_line) + "," 
 			  << std::to_string(m_col) << "): "
@@ -40,9 +41,10 @@ Position VU_Parser::pos()
 
 	std::cerr << "+ " << eLine << "\n";
 	std::cerr << "+ ";
-	for (int i = 1; i < m_col; i++)
+	for (i = 0; i < m_oldCol; i++)
 		std::cerr << " ";
-	std::cerr << "^";
+	for (; i < m_col; i++)
+		std::cerr << "^";
 
 	std::cerr << "\n\texpected one of: \n";
 

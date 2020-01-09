@@ -1,2 +1,2 @@
-Dim test As SomeClass(Hello, (World)) = do(5 + 6, 7 _
+Dim fffffa test As SomeClass(Hello, (World)) = do(5 + 6, 7 _
 , 1++, 241, hello.world)

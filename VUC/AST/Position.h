@@ -19,11 +19,14 @@ the file "EULA.md", which should have been included with this file.
 /* Details of the position of some source code. */
 class Position
 {
+    size_t m_oldLine, m_oldCol, m_oldPos;
     size_t m_line, m_col, m_pos;
 
   public:
-    Position(size_t line, size_t col, size_t pos)
-        : m_line(line), m_col(col), m_pos(pos)
+    Position(size_t oldLine, size_t oldCol, size_t oldPos, size_t line,
+             size_t col, size_t pos)
+        : m_oldLine(oldLine), m_oldCol(oldCol), m_oldPos(oldPos), m_line(line),
+          m_col(col), m_pos(pos)
     {
     }
 
