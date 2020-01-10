@@ -1,6 +1,8 @@
 %include{
 #include <iostream>
 #include <list>
+#include <tuple>
+#include <variant>
 
 #include "VUComp.h"
 #include "AST/Constant.h"
@@ -11,6 +13,10 @@
 #include "AST/Module.h"
 
 #define LEMON_SUPER VU_Parser
+
+typedef void * ClassDeclType;
+typedef std::tuple<Token, TypeRepr *> TupTokTypeRepr;
+
 }
 
 
@@ -26,6 +32,16 @@ Position VU_Parser::pos()
 	yypParser *self = (yypParser *)this;
 	return Position(self->m_oldLine, self->m_oldCol, self->m_oldPos, self->m_line, self->m_col, self->m_pos);
 }
+
+// FIXME: need std::variant for this.
+/*void addClsDecl(std::vector<Node *> rcvr, ClassDeclType decl)
+{
+	if (Node * nod = dynamic_cast<Node *>(decl))
+		rcvr.push_back(nod);
+	else
+		for (auto d : dynamic_cast<std::vector<Node *>>(decl))
+			rcvr.push_back(d);
+}*/ 
 
 }
 
@@ -126,15 +142,25 @@ visibility_spec
 	::= PRIVATE.
 
 variable_stmt(S)
-	::= visibility_spec variable_stmt_els. { S = new Node(pos()); }
+	::= visibility_spec variable_stmt_els(s).
+		{
+			S = new DimDecl(pos(), std::get<0>(s).stringValue, TypeLoc(std::get<1>(s))); 
+		}
+
+%type variable_stmt_els { TupTokTypeRepr }
 
 variable_stmt_els
 	::= variable_decl_part.
 variable_stmt_els
 	::= variable_stmt_els COMMA variable_decl_part.
 
-variable_decl_part
-	::= IDENTIFIER opt_subscripts AS type_name opt_initialiser.
+%type variable_decl_part { TupTokTypeRepr }
+
+variable_decl_part(P)
+	::= IDENTIFIER(s) opt_subscripts AS type_name(t) opt_initialiser.
+	{
+		P = TupTokTypeRepr(s, t);
+	}
 
 opt_initialiser
 	::= .

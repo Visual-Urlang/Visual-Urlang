@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AST\AST.cpp" />
+    <ClCompile Include="AST\Decl.cpp" />
     <ClCompile Include="AST\Module.cpp" />
     <ClCompile Include="VUComp.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(TargetDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

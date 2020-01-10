@@ -14,38 +14,13 @@ the file "EULA.md", which should have been included with this file.
               All rights reserved.
 ********************************************************************/
 
-#pragma once
+#include <iostream>
 
-#include "Node.h"
-#include "TypeLoc.h"
+#include "AST/Decl.h"
 
-class Decl : public Node
+void DimDecl::print(size_t indent)
 {
-  public:
-    explicit Decl(Position pos) : Node(pos) {}
-};
-
-/* any decl with a name */
-class NamedDecl : public Decl
-{
-  protected:
-    std::string m_name;
-
-  public:
-    NamedDecl(Position pos, std::string name) : Decl(pos), m_name(name) {}
-};
-
-/* a variable declaration */
-class DimDecl : public NamedDecl
-{
-  protected:
-    TypeLoc m_typeLoc;
-
-  public:
-    DimDecl(Position pos, std::string name, TypeLoc typeLoc)
-        : NamedDecl(pos, name), m_typeLoc(typeLoc)
-    {
-    }
-
-    virtual void print(size_t indent);
-};
+    std::cout << blanks(indent) << "[DimDecl: " << m_name << " type: "
+              << "blanktype"
+              << "]";
+}
