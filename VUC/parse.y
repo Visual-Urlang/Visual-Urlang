@@ -8,6 +8,7 @@
 #include "AST/Stmt.h"
 #include "AST/TypeLoc.h"
 #include "AST/FunCallE.h"
+#include "AST/Module.h"
 
 #define LEMON_SUPER VU_Parser
 }
@@ -88,7 +89,10 @@ Position VU_Parser::pos()
 file ::= module EOF.
 
 module
-	::= CLASS opt_signature cls_decl_list.
+	::= CLASS opt_signature cls_decl_list(l).
+	{
+		m_mod = new Class(pos(), "-a-class-", new CompoundStmt(pos(), l));
+	}
 module
 	::= BAS bas_decl_list.
 
@@ -100,10 +104,12 @@ opt_signature
 signature
 	::= SIGNATURE.
 
-cls_decl_list
-	::= cls_decl EOL.
-cls_decl_list
-	::= cls_decl_list cls_decl EOL.
+%type cls_decl_list { std::vector<Node *> }
+
+cls_decl_list(L)
+	::= cls_decl(c) EOL. { L = std::vector<Node *>({c}); }
+cls_decl_list(L)
+	::= cls_decl_list(l) cls_decl(c) EOL. { (L = l).push_back(c); }
 bas_decl_list
 	::= .
 
@@ -119,8 +125,8 @@ visibility_spec
 visibility_spec
 	::= PRIVATE.
 
-variable_stmt
-	::= visibility_spec variable_stmt_els.
+variable_stmt(S)
+	::= visibility_spec variable_stmt_els. { S = new Node(pos()); }
 
 variable_stmt_els
 	::= variable_decl_part.

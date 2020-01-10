@@ -18,19 +18,32 @@ the file "EULA.md", which should have been included with this file.
 
 #include <vector>
 
+#include "Decl.h"
 #include "Expr.h"
-#include "Node.h"
 
 class Stmt : public Node
 {
+  public:
+    explicit Stmt(Position pos) : Node(pos) {}
 };
 
 class CompoundStmt : public Stmt
 {
-    std::vector<Stmt *> m_stmts;
+    std::vector<Node *> m_code;
+
+  public:
+    CompoundStmt(Position pos, std::vector<Node *> nodes)
+        : Stmt(pos), m_code(nodes)
+    {
+    }
+
+    std::vector<Node *> &getCode() { return m_code; }
 };
 
 class ExprStmt : public Stmt
 {
     Expr *m_expr;
+
+  public:
+    ExprStmt(Position pos, Expr *expr) : Stmt(pos), m_expr(expr) {}
 };

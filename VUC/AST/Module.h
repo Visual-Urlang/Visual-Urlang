@@ -16,13 +16,38 @@ the file "EULA.md", which should have been included with this file.
 
 #pragma once
 
-#include "Node.h"
+#include <memory>
 
-class Module : public Node
+#include "Decl.h"
+
+class CompoundStmt;
+
+class Module : public Decl
 {
+  protected:
+    std::string m_name;
+    CompoundStmt *m_body;
+
+  public:
     enum ModType
     {
         evMod,
         evClass,
-    };
+    } m_modType;
+
+    Module(Position pos, ModType modType, std::string name, CompoundStmt *body)
+        : Decl(pos), m_modType(modType), m_name(name), m_body(body)
+    {
+    }
+};
+
+class Class : public Module
+{
+  public:
+    Class(Position pos, std::string name, CompoundStmt *body)
+        : Module(pos, evClass, name, body)
+    {
+    }
+
+    virtual void print(size_t indent);
 };

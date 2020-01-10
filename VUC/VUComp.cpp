@@ -68,6 +68,8 @@ void parseFile(bool trace, std::string fName)
     while (vuclex(scanner))
         ;
     parser->parse(TOK_EOF);
+
+    parser->mod()->print(0);
 }
 
 int main(int argc, char *argv[])

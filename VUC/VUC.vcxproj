@@ -155,6 +155,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AST\AST.cpp" />
+    <ClCompile Include="AST\Module.cpp" />
     <ClCompile Include="VUComp.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(TargetDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(TargetDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -184,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AST\Constant.h" />
+    <ClInclude Include="AST\Decl.h" />
     <ClInclude Include="AST\Expr.h" />
     <ClInclude Include="AST\FunCallE.h" />
     <ClInclude Include="AST\IdExpr.h" />

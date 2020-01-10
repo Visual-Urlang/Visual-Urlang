@@ -10,28 +10,15 @@ the file "EULA.md", which should have been included with this file.
 
         Copyright Notice
 
-    (c) 2019-2020 The Visual Urlang Project.
+    (c) 2020 The Visual Urlang Project.
               All rights reserved.
 ********************************************************************/
 
-#pragma once
-
 #include <iostream>
 
-#include "Position.h"
+#include "AST/Node.h"
 
-class Node
+void Node::print(size_t indent)
 {
-    Position m_pos;
-
-  public:
-    explicit Node(Position pos) : m_pos(pos) {}
-
-    Position pos() const;
-
-    virtual void print(size_t indent);
-};
-
-inline Position Node::pos() const { return m_pos; }
-
-inline std::string blanks(size_t n) { return std::string(n, ' '); }
+    std::cout << blanks(indent) << "[unknown-node]";
+}
