@@ -57,7 +57,7 @@ extern int access(const char *path, int mode);
 #endif
 
 extern void memory_error();
-static int showPrecedenceConflict = 0;
+static int showPrecedenceConflict = 1;
 static char *msort(char *, char **, int (*)(const char *, const char *));
 
 /*
@@ -1943,8 +1943,7 @@ int main(int argc, char **argv)
         {OPT_FSTR, "T", (char *)handle_T_option, "Specify a template file."},
         {OPT_FSTR, "W", 0,
          "Ignored.  (Placeholder for '-W' compiler options.)"},
-        {OPT_INT, "nconflicts", (char *)&nconflict,
-         "Expect N shift/reduce conflicts."},
+        {OPT_INT, "n", (char *)&nconflict, "Expect N shift/reduce conflicts."},
         {OPT_FLAG, 0, 0, 0}};
     int i;
     int exitcode;
@@ -2117,7 +2116,6 @@ int main(int argc, char **argv)
         exitcode = 1;
     if (lem.nconflict && lem.nconflict != nconflict)
         exitcode = 1;
-    /* exitcode = ((lem.errorcnt > 0) || (lem.nconflict > 0)) ? 1 : 0; */
     exit(exitcode);
     return (exitcode);
 }
@@ -2356,6 +2354,10 @@ static int handleflags(int i, FILE *err)
     else if (op[j].type == OPT_FSTR)
     {
         (*(void (*)(char *))(op[j].arg))(&g_argv[i][2]);
+    }
+    else if (op[j].type == OPT_INT)
+    {
+        *((int *)op[j].arg) = g_argv[i][2] - '0';
     }
     else
     {

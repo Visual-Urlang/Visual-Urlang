@@ -32,5 +32,5 @@ void FunCallExpr::print(size_t indent)
         std::cout << "\n";
     }
 
-    std::cout << "\n" << blanks(indent) << "]";
+    std::cout << blanks(indent) << "]";
 }

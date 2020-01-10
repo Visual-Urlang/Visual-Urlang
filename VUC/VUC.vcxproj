@@ -181,10 +181,10 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(TargetDir)%(Filename).cpp;$(TargetDir)%(Filename).h</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(TargetDir)%(Filename).cpp;$(TargetDir)%(Filename).h</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(TargetDir)%(Filename).cpp;$(TargetDir)%(Filename).h</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Lemon.exe -T$(SolutionDir)External\Lemon\lempar.cxx -d$(TargetDir) %(FullPath) </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Lemon.exe -T$(SolutionDir)External\Lemon\lempar.cxx -d$(TargetDir) %(FullPath) </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Lemon.exe -T$(SolutionDir)External\Lemon\lempar.cxx -d$(TargetDir) %(FullPath) </Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Lemon.exe -T$(SolutionDir)External\Lemon\lempar.cxx -d$(TargetDir) %(FullPath) </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)Lemon.exe -n1 -p -T$(SolutionDir)External\Lemon\lempar.cxx -d$(TargetDir) %(FullPath) </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)Lemon.exe -n1 -p -T$(SolutionDir)External\Lemon\lempar.cxx -d$(TargetDir) %(FullPath) </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Lemon.exe -n1 -p -T$(SolutionDir)External\Lemon\lempar.cxx -d$(TargetDir) %(FullPath) </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Lemon.exe -n1 -p -T$(SolutionDir)External\Lemon\lempar.cxx -d$(TargetDir) %(FullPath) </Command>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating Parser</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating Parser</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating Parser</Message>

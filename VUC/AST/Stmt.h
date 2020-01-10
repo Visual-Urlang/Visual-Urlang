@@ -37,6 +37,8 @@ class CompoundStmt : public Stmt
     {
     }
 
+    void addCode(Node *c) { m_code.push_back(c); }
+
     std::vector<Node *> &getCode() { return m_code; }
 
     virtual void print(size_t indent);

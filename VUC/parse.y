@@ -96,6 +96,7 @@ Position VU_Parser::pos()
 %left UN.
 
 %left LBRACKET LSBRACKET RBRACKET RSBRACKET.
+%left EOL.
 
 %right DOTACCESS.
 
@@ -143,7 +144,7 @@ cls_decl
 
 func_stmt(F)
 	::= opt_visibility_spec FUNCTION IDENTIFIER(n) 
-		opt_param_list(p) opt_as_clause(t) EOL block_stmt_list(l) END FUNCTION.
+		opt_param_list(p) opt_as_clause(t) EOL block_stmt_list(l) EOL END FUNCTION.
 		{
 			F = new FunctionDecl(pos(), n.stringValue, p, new TypeLoc(t), l);
 		}
@@ -151,15 +152,20 @@ func_stmt(F)
 %type block_stmt_list { CompoundStmt * }
 
 block_stmt_list(L)
-	::= block_stmt(s) EOL. { L = new CompoundStmt(pos(), {s}); }
-block_stmt_list
-	::= block_stmt_list EOL block_stmt.
+	::= block_stmt(s). { L = new CompoundStmt(pos(), {s}); }
+block_stmt_list(L)
+	::= block_stmt_list(l) EOL block_stmt(s). { (L = l)->addCode(s); }
 
 block_stmt ::= variable_stmt.
 block_stmt ::= bracketed_expr.
-block_stmt(B) ::= dotaccess_expr(c) argument_expr_list.
+block_stmt(B) ::= dotaccess_expr(c) argument_expr_list(l).
 	{
-		B = new FunCallExpr(pos(), c, {});
+		B = new FunCallExpr(pos(), c, l);
+	}
+block_stmt(B)
+	::= dotaccess_expr(c) LBRACKET argument_expr_list(l) RBRACKET.
+	{
+		B = new FunCallExpr(pos(), c, l);
 	}
 
 %type opt_param_list { std::vector<ParamDecl*> }
@@ -264,13 +270,13 @@ primary_expr
 primary_expr(E)
 	::= bracketed_expr(e). { E = e; }
 
-dotaccess_expr
-	::= primary_expr.
+dotaccess_expr(E)
+	::= primary_expr(e). { E = e; }
 dotaccess_expr
 	::= dotaccess_expr DOT IDENTIFIER. [DOTACCESS]
 
-postfix_expr
-	::= dotaccess_expr.
+postfix_expr(E)
+	::= dotaccess_expr(e). { E = e; }
 postfix_expr
 	::= postfix_expr LSBRACKET expr RSBRACKET. [UN]
 postfix_expr(P)
@@ -304,6 +310,7 @@ argument_expr_list(L)
 %type shift_expr { Expr * }
 %type rel_expr { Expr * }
 %type eq_expr { Expr * }
+%type and_expr { Expr * }
 %type excl_or_expr { Expr * }
 %type incl_or_expr { Expr * }
 %type log_and_expr { Expr * }
@@ -311,8 +318,8 @@ argument_expr_list(L)
 %type cond_expr { Expr * }
 %type assign_expr { Expr * }
 
-unary_expr
-	::= postfix_expr.
+unary_expr(E)
+	::= postfix_expr(e).  { E = e; }
 unary_expr
 	::= unary_operator cast_expr. [UNA]
 unary_expr
@@ -333,13 +340,13 @@ unary_operator
 unary_operator	
 	::= TILDE.
 
-cast_expr
-	::= unary_expr.
+cast_expr(E)
+	::= unary_expr(e). { E = e; }
 cast_expr
 	::= LCARET type_name RCARET cast_expr. [UNA]
 
-mul_expr
-	::= cast_expr.
+mul_expr(E)
+	::= cast_expr(e). { E = e; }
 mul_expr
 	::= mul_expr STAR cast_expr.
 mul_expr
@@ -347,22 +354,22 @@ mul_expr
 mul_expr
 	::= mul_expr PERCENT cast_expr.
 
-add_expr
-	::= mul_expr.
+add_expr(E)
+	::= mul_expr(e). { E = e; }
 add_expr
 	::= add_expr PLUS mul_expr.
 add_expr
 	::= add_expr MINUS mul_expr.
 
-shift_expr
-	::= add_expr.
+shift_expr(E)
+	::= add_expr(e). { E = e; }
 shift_expr
 	::= shift_expr LEFT_OP add_expr.
 shift_expr
 	::= shift_expr RIGHT_OP add_expr.
 
-rel_expr
-	::= shift_expr.
+rel_expr(E)
+	::= shift_expr(e). { E = e; }
 rel_expr
 	::= rel_expr LCARET shift_expr.
 rel_expr
@@ -372,45 +379,45 @@ rel_expr
 rel_expr
 	::= rel_expr GE_OP shift_expr.
 
-eq_expr
-	::= rel_expr.
+eq_expr(E)
+	::= rel_expr(e). { E = e; }
 eq_expr
 	::= eq_expr EQ_OP rel_expr.
 eq_expr
 	::= eq_expr NE_OP rel_expr.
 
-and_expr
-	::= eq_expr.
+and_expr(E)
+	::= eq_expr(e). { E = e; }
 and_expr
 	::= and_expr AND eq_expr.
 
-excl_or_expr
-	::= and_expr.
+excl_or_expr(E)
+	::= and_expr(e). { E = e; }
 excl_or_expr
 	::= excl_or_expr HAT and_expr.
 
-incl_or_expr
-	::= excl_or_expr.
+incl_or_expr(E)
+	::= excl_or_expr(e). { E = e; }
 incl_or_expr
 	::= incl_or_expr BAR excl_or_expr.
 
-log_and_expr
-	::= incl_or_expr.
+log_and_expr(E)
+	::= incl_or_expr(e). { E = e; }
 log_and_expr
 	::= log_and_expr AND_OP incl_or_expr.
 
-log_or_expr
-	::= log_and_expr.
+log_or_expr(E)
+	::= log_and_expr(e). { E = e; }
 log_or_expr
 	::= log_or_expr OR_OP log_and_expr.
 
-cond_expr
-	::= log_or_expr.
+cond_expr(E)
+	::= log_or_expr(e). { E = e; }
 cond_expr
 	::= log_or_expr QUESTION expr COLON cond_expr.
 
-assign_expr
-	::= cond_expr.
+assign_expr(E)
+	::= cond_expr(e). { E = e; }
 assign_expr
 	::= unary_expr assign_op assign_expr.
 
@@ -439,10 +446,10 @@ assign_op
 
 %type expr { Expr * }
 
-expr
-	::= assign_expr.
-expr
-	::= expr COMMA assign_expr.
+expr(E)
+	::= assign_expr(e). { E = e; }
+expr(E)
+	::= expr(e) SEMICOLON assign_expr. { E = e; printf("generated comma expr\n"); }
 
 %type primary_type_name { TypeRepr * }
 %type type_name { TypeRepr * }
