@@ -15,3 +15,14 @@ the file "EULA.md", which should have been included with this file.
 ********************************************************************/
 
 #include "AST/Stmt.h"
+
+void CompoundStmt::print(size_t indent)
+{
+    std::cout << blanks(indent) << "[CompoundStmt: \n";
+    for (auto c : m_code)
+    {
+        c->print(indent + 2);
+        std::cout << "\n";
+    }
+    std::cout << blanks(indent) << "]";
+}

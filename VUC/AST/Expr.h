@@ -16,10 +16,26 @@ the file "EULA.md", which should have been included with this file.
 
 #pragma once
 
+#include <list>
+
 #include "Node.h"
 
 class Expr : public Node
 {
   public:
     explicit Expr(Position pos) : Node(pos) {}
+};
+
+class FunCallExpr : public Expr
+{
+    Expr *m_func;
+    std::list<Expr *> m_args;
+
+  public:
+    FunCallExpr(Position pos, Expr *func, std::list<Expr *> exprs)
+        : Expr(pos), m_func(func), m_args(exprs)
+    {
+    }
+
+    virtual void print(size_t indent);
 };

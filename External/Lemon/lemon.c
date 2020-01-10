@@ -6359,7 +6359,7 @@ int CompareHeader(FILE *in, struct lemon *lemp, const char *prefix)
     char line[LINESIZE];
     char pattern[LINESIZE];
     int i;
-    int nextChar;
+    // int nextChar;
 
     for (i = 1; i < lemp->nterminal && fgets(line, LINESIZE, in); i++)
     {

@@ -38,6 +38,8 @@ class CompoundStmt : public Stmt
     }
 
     std::vector<Node *> &getCode() { return m_code; }
+
+    virtual void print(size_t indent);
 };
 
 class ExprStmt : public Stmt

@@ -9,7 +9,6 @@
 #include "AST/IdExpr.h"
 #include "AST/Stmt.h"
 #include "AST/TypeLoc.h"
-#include "AST/FunCallE.h"
 #include "AST/Module.h"
 
 #define LEMON_SUPER VU_Parser
@@ -152,13 +151,16 @@ func_stmt(F)
 %type block_stmt_list { CompoundStmt * }
 
 block_stmt_list(L)
-	::= block_stmt EOL. { L = new CompoundStmt(pos(), {}); }
+	::= block_stmt(s) EOL. { L = new CompoundStmt(pos(), {s}); }
 block_stmt_list
 	::= block_stmt_list EOL block_stmt.
 
 block_stmt ::= variable_stmt.
 block_stmt ::= bracketed_expr.
-block_stmt ::= dotaccess_expr argument_expr_list.
+block_stmt(B) ::= dotaccess_expr(c) argument_expr_list.
+	{
+		B = new FunCallExpr(pos(), c, {});
+	}
 
 %type opt_param_list { std::vector<ParamDecl*> }
 %type param_list { std::vector<ParamDecl *> }
@@ -247,6 +249,7 @@ constant(C)
 %type bracketed_expr { Expr * }
 %type primary_expr { Expr * }
 %type postfix_expr { Expr * }
+%type dotaccess_expr { Expr * }
 
 bracketed_expr(E)
 	::= LBRACKET expr(e) RBRACKET.

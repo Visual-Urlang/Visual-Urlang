@@ -14,21 +14,23 @@ the file "EULA.md", which should have been included with this file.
               All rights reserved.
 ********************************************************************/
 
-#pragma once
+#include <iostream>
 
-#include <List>
+#include "AST/Expr.h"
 
-#include "Expr.h"
-
-/* A function call. Callee */
-class FunCallExpr : public Expr
+void FunCallExpr::print(size_t indent)
 {
-    Expr *m_func;
-    std::list<Expr *> m_args;
+    std::cout << blanks(indent) << "[Funcall: ";
+    m_func->print(0);
 
-  public:
-    FunCallExpr(Position pos, Expr *func, std::list<Expr *> exprs)
-        : Expr(pos), m_func(func), m_args(exprs)
+    std::cout << " args: \n";
+
+    for (auto a : m_args)
     {
+        std::cout << blanks(indent) << "arg: \n";
+        a->print(indent + 2);
+        std::cout << "\n";
     }
-};
+
+    std::cout << "\n" << blanks(indent) << "]";
+}
