@@ -16,8 +16,12 @@ the file "EULA.md", which should have been included with this file.
 
 #pragma once
 
+#include <vector>
+
 #include "Node.h"
 #include "TypeLoc.h"
+
+class CompoundStmt;
 
 class Decl : public Node
 {
@@ -44,6 +48,33 @@ class DimDecl : public NamedDecl
   public:
     DimDecl(Position pos, std::string name, TypeLoc typeLoc)
         : NamedDecl(pos, name), m_typeLoc(typeLoc)
+    {
+    }
+
+    virtual void print(size_t indent);
+};
+
+class ParamDecl : public DimDecl
+{
+  public:
+    ParamDecl(Position pos, std::string name, TypeLoc typeLoc)
+        : DimDecl(pos, name, typeLoc)
+    {
+    }
+};
+
+class FunctionDecl : public NamedDecl
+{
+    std::vector<ParamDecl *> m_formals;
+    TypeLoc *m_rType;
+    CompoundStmt *m_code;
+
+  public:
+    FunctionDecl(Position pos, std::string name,
+                 std::vector<ParamDecl *> paramDecls, TypeLoc *type,
+                 CompoundStmt *code)
+        : NamedDecl(pos, name), m_formals(paramDecls), m_rType(type),
+          m_code(code)
     {
     }
 

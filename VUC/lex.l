@@ -40,9 +40,15 @@ COMMENT \"(\\.|[^"])*\"
 
 %%
 
+"_"{NEWLINE}        { /* line continuation */ }
+{NEWLINE}           { yyextra->parse(TOK_EOL); }
+
 "As"            { prs(AS); }
-"Dim"           { prs(DIM); }
 "Call"          { yyextra->parse(TOK_CALL); }
+"Dim"           { prs(DIM); }
+"End"           { prs(END); }
+"Function"      { prs(FUNCTION); }
+"Public"        { prs(PUBLIC); }
 
 "Integer"       { prs(INTEGER); }
 
@@ -87,7 +93,4 @@ COMMENT \"(\\.|[^"])*\"
 
 "'"[^\n\r]*         { }
 
-"_"{NEWLINE}        { /* line continuation */ }
-{NEWLINE}           { yyextra->parse(TOK_EOL); }
-
-[ \t\n\r]+          {}
+[ \t]+          {}

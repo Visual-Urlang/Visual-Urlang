@@ -29,10 +29,8 @@ class Constant : public Node
         evString,
     } m_constType;
 
-    union {
-        int m_intValue;
-        std::string m_strValue;
-    };
+    int m_intValue;
+    std::string m_strValue;
 
   public:
     Constant(Position pos, int intValue)

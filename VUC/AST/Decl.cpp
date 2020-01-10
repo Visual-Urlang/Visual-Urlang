@@ -17,10 +17,19 @@ the file "EULA.md", which should have been included with this file.
 #include <iostream>
 
 #include "AST/Decl.h"
+#include "AST/Stmt.h"
 
 void DimDecl::print(size_t indent)
 {
     std::cout << blanks(indent) << "[DimDecl: " << m_name << " type: "
               << "blanktype"
               << "]";
+}
+
+void FunctionDecl::print(size_t indent)
+{
+    std::cout << blanks(indent) << "[FunDecl: " << m_name << " rtype: "
+              << "blanktype\n";
+    m_code->print(indent + 2);
+    std::cout << "\n" << blanks(indent) << "]";
 }

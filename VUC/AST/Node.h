@@ -25,6 +25,7 @@ class Node
     Position m_pos;
 
   public:
+    virtual ~Node() = default;
     explicit Node(Position pos) : m_pos(pos) {}
 
     Position pos() const;

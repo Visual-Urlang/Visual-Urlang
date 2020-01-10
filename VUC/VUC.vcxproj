@@ -158,6 +158,7 @@
     <ClCompile Include="AST\AST.cpp" />
     <ClCompile Include="AST\Decl.cpp" />
     <ClCompile Include="AST\Module.cpp" />
+    <ClCompile Include="AST\Stmt.cpp" />
     <ClCompile Include="VUComp.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(TargetDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(TargetDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

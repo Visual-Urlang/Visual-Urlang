@@ -122,30 +122,90 @@ signature
 
 %type cls_decl_list { std::vector<Node *> }
 
+eol
+	::= EOL.
+
+eols
+	::= eol.
+eols
+	::= eols eol.
+
 cls_decl_list(L)
-	::= cls_decl(c) EOL. { L = std::vector<Node *>({c}); }
+	::= cls_decl(c) eols. { L = std::vector<Node *>({c}); }
 cls_decl_list(L)
-	::= cls_decl_list(l) cls_decl(c) EOL. { (L = l).push_back(c); }
+	::= cls_decl_list(l) cls_decl(c) eols. { (L = l).push_back(c); }
 bas_decl_list
 	::= .
 
 cls_decl
 	::= block_stmt.
+cls_decl
+	::= func_stmt.
+
+func_stmt(F)
+	::= opt_visibility_spec FUNCTION IDENTIFIER(n) 
+		opt_param_list(p) opt_as_clause(t) EOL block_stmt_list(l) END FUNCTION.
+		{
+			F = new FunctionDecl(pos(), n.stringValue, p, new TypeLoc(t), l);
+		}
+
+%type block_stmt_list { CompoundStmt * }
+
+block_stmt_list(L)
+	::= block_stmt EOL. { L = new CompoundStmt(pos(), {}); }
+block_stmt_list
+	::= block_stmt_list EOL block_stmt.
 
 block_stmt ::= variable_stmt.
 block_stmt ::= bracketed_expr.
 block_stmt ::= dotaccess_expr argument_expr_list.
 
-visibility_spec
-	::= DIM.
+%type opt_param_list { std::vector<ParamDecl*> }
+%type param_list { std::vector<ParamDecl *> }
+
+opt_param_list
+	::= param_list.
+opt_param_list
+	::= .
+
+param_list(P)
+	::= variable_decl_part(p). 
+	{
+		auto decl = new ParamDecl(pos(), std::get<0>(p).stringValue, TypeLoc(std::get<1>(p)));
+		P = std::vector<ParamDecl *>({decl}); 
+	}
+param_list(P)
+	::= param_list(l) variable_decl_part(p).
+	{
+		auto decl = new ParamDecl(pos(), std::get<0>(p).stringValue, TypeLoc(std::get<1>(p)));
+		(P = l).push_back({decl}); 
+	}
+
+opt_visibility_spec
+	::= visibility_spec.
+
+%type opt_as_clause { TypeRepr * }
+
+opt_as_clause
+	::= .
+opt_as_clause(T)
+	::= AS type_name(t). { T = t; }
+
 visibility_spec
 	::= PRIVATE.
+visibility_spec
+	::= PUBLIC.
+
+dim_or_visibility_spec
+	::= DIM.
+dim_or_visibility_spec
+	::= visibility_spec.
 
 variable_stmt(S)
-	::= visibility_spec variable_stmt_els(s).
-		{
-			S = new DimDecl(pos(), std::get<0>(s).stringValue, TypeLoc(std::get<1>(s))); 
-		}
+	::= dim_or_visibility_spec variable_stmt_els(s).
+	{
+		S = new DimDecl(pos(), std::get<0>(s).stringValue, TypeLoc(std::get<1>(s))); 
+	}
 
 %type variable_stmt_els { TupTokTypeRepr }
 

@@ -14,18 +14,4 @@ the file "EULA.md", which should have been included with this file.
               All rights reserved.
 ********************************************************************/
 
-#pragma once
-
-#include "Type.h"
-#include "TypeRepr.h"
-
-/* Represents a location in the source where a type can be. */
-class TypeLoc
-{
-    TypeRepr *m_repr = nullptr;
-    Type *m_type = nullptr;
-
-  public:
-    explicit TypeLoc() {}
-    explicit TypeLoc(TypeRepr *repr) : m_repr(repr) {}
-};
+#include "AST/Stmt.h"
