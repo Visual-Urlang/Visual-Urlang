@@ -48,6 +48,9 @@
     <ClCompile Include="AST\Expr.cpp">
       <Filter>Source Files\AST</Filter>
     </ClCompile>
+    <ClCompile Include="AST\Scope.cpp">
+      <Filter>Source Files\AST</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="parse.y" />
@@ -91,6 +94,9 @@
       <Filter>Header Files\AST</Filter>
     </ClInclude>
     <ClInclude Include="AST\Unit.h">
+      <Filter>Header Files\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Scope.h">
       <Filter>Header Files\AST</Filter>
     </ClInclude>
   </ItemGroup>

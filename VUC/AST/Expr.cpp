@@ -44,5 +44,5 @@ void DotExpr::print(size_t indent)
 {
     std::cout << blanks(indent) << "[DotExpr: \n";
     m_base->print(indent + 2);
-    std ::cout << "." << m_id || "]";
+    std::cout << "." << m_id || "]";
 }

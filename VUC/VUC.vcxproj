@@ -159,6 +159,7 @@
     <ClCompile Include="AST\Decl.cpp" />
     <ClCompile Include="AST\Expr.cpp" />
     <ClCompile Include="AST\Module.cpp" />
+    <ClCompile Include="AST\Scope.cpp" />
     <ClCompile Include="AST\Stmt.cpp" />
     <ClCompile Include="VUComp.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(TargetDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -203,6 +204,7 @@
     <ClInclude Include="AST\Module.h" />
     <ClInclude Include="AST\Node.h" />
     <ClInclude Include="AST\Position.h" />
+    <ClInclude Include="AST\Scope.h" />
     <ClInclude Include="AST\Stmt.h" />
     <ClInclude Include="AST\Type.h" />
     <ClInclude Include="AST\TypeLoc.h" />
