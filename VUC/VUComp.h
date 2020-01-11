@@ -18,8 +18,8 @@ the file "EULA.md", which should have been included with this file.
 
 #include <string>
 
-#include "AST/Module.h"
 #include "AST/Position.h"
+#include "AST/Unit.h"
 #include "Lemon/lemon_base.h"
 
 struct Token
@@ -44,7 +44,7 @@ class VU_Parser : public lemon_base<Token>
   protected:
     std::string fName;
     std::string &fText;
-    Module *m_mod;
+    Unit *m_mod;
     int m_line = 0, m_col = 0, m_pos = 0;
     int m_oldLine = 0, m_oldCol = 0, m_oldPos = 0;
 
@@ -69,7 +69,7 @@ class VU_Parser : public lemon_base<Token>
     virtual void trace(FILE *, const char *) = 0;
 
     /* misc */
-    Module *mod() { return m_mod; }
+    Unit *mod() { return m_mod; }
 
     /* line tracking */
     Position pos();

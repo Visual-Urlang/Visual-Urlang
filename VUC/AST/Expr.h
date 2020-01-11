@@ -20,6 +20,8 @@ the file "EULA.md", which should have been included with this file.
 
 #include "Node.h"
 
+class Decl;
+
 class Expr : public Node
 {
   public:
@@ -39,3 +41,33 @@ class FunCallExpr : public Expr
 
     virtual void print(size_t indent);
 };
+
+class IdentExpr : public Expr
+{
+    const std::string m_id;
+    /* the decl to which this ident refers */
+    Decl *m_decl = nullptr;
+
+  public:
+    explicit IdentExpr(Position _pos, std::string id) : Expr(_pos), m_id(id) {}
+
+    virtual void print(size_t indent);
+
+    std::string id() const;
+};
+
+class DotExpr : public Expr
+{
+    const std::string m_id;
+    Expr *m_base;
+
+  public:
+    explicit DotExpr(Position _pos, std::string id, Expr *base)
+        : Expr(_pos), m_id(id), m_base(base)
+    {
+    }
+
+    virtual void print(size_t indent);
+};
+
+inline std::string IdentExpr::id() const { return m_id; }

@@ -6,7 +6,7 @@
 
 #include "VUComp.h"
 #include "AST/Constant.h"
-#include "AST/IdExpr.h"
+#include "AST/Expr.h"
 #include "AST/Stmt.h"
 #include "AST/TypeLoc.h"
 #include "AST/Module.h"
@@ -105,12 +105,10 @@ Position VU_Parser::pos()
 file ::= module EOF.
 
 module
-	::= CLASS opt_signature cls_decl_list(l).
+	::= block_stmt_list(l).
 	{
-		m_mod = new Class(pos(), "-a-class-", new CompoundStmt(pos(), l));
+		m_mod = new Unit("-a-unit-", l);
 	}
-module
-	::= BAS bas_decl_list.
 
 opt_signature
 	::= signature.
@@ -120,8 +118,6 @@ opt_signature
 signature
 	::= SIGNATURE.
 
-%type cls_decl_list { std::vector<Node *> }
-
 eol
 	::= EOL.
 
@@ -130,17 +126,11 @@ eols
 eols
 	::= eols eol.
 
-cls_decl_list(L)
-	::= cls_decl(c) eols. { L = std::vector<Node *>({c}); }
-cls_decl_list(L)
-	::= cls_decl_list(l) cls_decl(c) eols. { (L = l).push_back(c); }
-bas_decl_list
-	::= .
-
-cls_decl
-	::= block_stmt.
-cls_decl
-	::= func_stmt.
+cls_stmt(C)
+	::= opt_visibility_spec CLASS IDENTIFIER(i) opt_signature eols block_stmt_list(l) eols END CLASS.
+	{
+		C = new Class(pos(), i.stringValue, l);
+	}
 
 func_stmt(F)
 	::= opt_visibility_spec FUNCTION IDENTIFIER(n) 
@@ -154,8 +144,10 @@ func_stmt(F)
 block_stmt_list(L)
 	::= block_stmt(s). { L = new CompoundStmt(pos(), {s}); }
 block_stmt_list(L)
-	::= block_stmt_list(l) EOL block_stmt(s). { (L = l)->addCode(s); }
+	::= block_stmt_list(l) eols block_stmt(s). { (L = l)->addCode(s); }
 
+block_stmt ::= cls_stmt.
+block_stmt ::= func_stmt.
 block_stmt ::= variable_stmt.
 block_stmt ::= bracketed_expr.
 block_stmt(B) ::= dotaccess_expr(c) argument_expr_list(l).
@@ -272,8 +264,9 @@ primary_expr(E)
 
 dotaccess_expr(E)
 	::= primary_expr(e). { E = e; }
-dotaccess_expr
-	::= dotaccess_expr DOT IDENTIFIER. [DOTACCESS]
+dotaccess_expr(E)
+	::= dotaccess_expr(e) DOT IDENTIFIER(i). [DOTACCESS]
+	{ E = new DotExpr(pos(), i.stringValue, e); }
 
 postfix_expr(E)
 	::= dotaccess_expr(e). { E = e; }

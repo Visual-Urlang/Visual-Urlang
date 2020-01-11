@@ -22,6 +22,7 @@ the file "EULA.md", which should have been included with this file.
 
 class Node
 {
+  protected:
     Position m_pos;
 
   public:

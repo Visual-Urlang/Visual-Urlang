@@ -18,16 +18,29 @@ the file "EULA.md", which should have been included with this file.
 
 #include "AST/Module.h"
 #include "AST/Stmt.h"
+#include "AST/Unit.h"
 
-void Class::print(size_t indent)
+void Unit::print(size_t indent)
 {
-    std::cout << blanks(indent) << "[class module: " << m_name
-              << "\ncontents: \n";
+    std::cout << blanks(indent) << "[unit: " << m_name << "\ncontents: \n";
     for (auto m : m_body->getCode())
     {
         m->print(indent + 2);
         std::cout << "\n";
     }
 
-    std::cout << "]\n";
+    std::cout << blanks(indent) << "]\n";
+}
+
+void Class::print(size_t indent)
+{
+    std::cout << blanks(indent) << "[class module: " << m_name << "\n"
+              << blanks(indent) << "contents: \n";
+    for (auto m : m_body->getCode())
+    {
+        m->print(indent + 2);
+        std::cout << "\n";
+    }
+
+    std::cout << blanks(indent) << "]\n";
 }

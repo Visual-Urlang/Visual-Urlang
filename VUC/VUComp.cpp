@@ -63,7 +63,7 @@ void parseFile(bool trace, std::string fName)
     /* Now we need to scan our string into the buffer. */
     yyb = vuc_scan_string(src.c_str(), scanner);
 
-    parser->parse(isCls ? TOK_CLASS : TOK_BAS);
+    // parser->parse(isCls ? TOK_CLASS : TOK_BAS);
 
     while (vuclex(scanner))
         ;

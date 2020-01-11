@@ -22,9 +22,13 @@ the file "EULA.md", which should have been included with this file.
 
 class CompoundStmt;
 
+/* A Module is either a class or a collection of other things instead. */
 class Module : public Decl
 {
   protected:
+    /* Is this module imported from elsewhere? If so we only care about it as
+     * an interface. */
+    bool m_isImported = false;
     std::string m_name;
     CompoundStmt *m_body;
 

@@ -20,10 +20,10 @@ the file "EULA.md", which should have been included with this file.
 
 void FunCallExpr::print(size_t indent)
 {
-    std::cout << blanks(indent) << "[Funcall: ";
-    m_func->print(0);
+    std::cout << blanks(indent) << "[Funcall: recvr: \n";
+    m_func->print(indent + 2);
 
-    std::cout << " args: \n";
+    std::cout << "\n" << blanks(indent) << "args: \n";
 
     for (auto a : m_args)
     {
@@ -33,4 +33,16 @@ void FunCallExpr::print(size_t indent)
     }
 
     std::cout << blanks(indent) << "]";
+}
+
+void IdentExpr::print(size_t indent)
+{
+    std::cout << blanks(indent) << "[IdentExpr: " << m_id << "]";
+}
+
+void DotExpr::print(size_t indent)
+{
+    std::cout << blanks(indent) << "[DotExpr: \n";
+    m_base->print(indent + 2);
+    std ::cout << "." << m_id || "]";
 }

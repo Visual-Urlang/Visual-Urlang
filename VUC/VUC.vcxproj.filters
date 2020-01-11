@@ -69,9 +69,6 @@
     <ClInclude Include="AST\Expr.h">
       <Filter>Header Files\AST</Filter>
     </ClInclude>
-    <ClInclude Include="AST\IdExpr.h">
-      <Filter>Header Files\AST</Filter>
-    </ClInclude>
     <ClInclude Include="AST\Constant.h">
       <Filter>Header Files\AST</Filter>
     </ClInclude>
@@ -91,6 +88,9 @@
       <Filter>Header Files\AST</Filter>
     </ClInclude>
     <ClInclude Include="AST\Decl.h">
+      <Filter>Header Files\AST</Filter>
+    </ClInclude>
+    <ClInclude Include="AST\Unit.h">
       <Filter>Header Files\AST</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,23 +10,33 @@ the file "EULA.md", which should have been included with this file.
 
         Copyright Notice
 
-    (c) 2020 The Visual Urlang Project.
+    (c) 2019-2020 The Visual Urlang Project.
               All rights reserved.
 ********************************************************************/
 
 #pragma once
 
-#include "Expr.h"
 #include <string>
 
-class IdentExpr : public Expr
+#include "Decl.h"
+#include "Stmt.h"
+
+class CompoundStmt;
+
+/* A unit is a collection of classes and other decls.
+ * Essentially it is a whole program, plus other things.
+ */
+class Unit : public Decl
 {
-    const std::string m_id;
+  protected:
+    std::string m_name;
+    CompoundStmt *m_body;
 
   public:
-    std::string id() const;
+    Unit(std::string name, CompoundStmt *body)
+        : Decl(Position(0, 0, 0, 0, 0, 0)), m_name(name), m_body(body)
+    {
+    }
 
-    explicit IdentExpr(Position _pos, std::string id) : Expr(_pos), m_id(id) {}
+    virtual void print(size_t indent);
 };
-
-inline std::string IdentExpr::id() const { return m_id; }

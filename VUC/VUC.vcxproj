@@ -200,7 +200,6 @@
     <ClInclude Include="AST\Constant.h" />
     <ClInclude Include="AST\Decl.h" />
     <ClInclude Include="AST\Expr.h" />
-    <ClInclude Include="AST\IdExpr.h" />
     <ClInclude Include="AST\Module.h" />
     <ClInclude Include="AST\Node.h" />
     <ClInclude Include="AST\Position.h" />
@@ -208,6 +207,7 @@
     <ClInclude Include="AST\Type.h" />
     <ClInclude Include="AST\TypeLoc.h" />
     <ClInclude Include="AST\TypeRepr.h" />
+    <ClInclude Include="AST\Unit.h" />
     <ClInclude Include="VUComp.h" />
     <ClInclude Include="$(TargetDir)lex.yy.h" />
   </ItemGroup>
