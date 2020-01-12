@@ -42,6 +42,8 @@ class Sym
     {
     }
 
+    std::string name() const { return m_name; }
+
     /* is a class */
     bool isCls() { return m_kind == evCls; }
     /* any class member */
@@ -65,8 +67,9 @@ class Scope
     std::vector<Sym *> m_syms;
 
   public:
-    Scope(Scope *super = nullptr);
+    Scope(Scope *super = nullptr) : m_super(super) {}
 
-    void reg(Sym *);
+    void addSubScope(Scope *sub);
+    void reg(Sym *sym);
     Sym *find(std::string name);
 };

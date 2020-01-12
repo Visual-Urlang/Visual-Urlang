@@ -27,7 +27,7 @@ class CompoundStmt;
 /* A unit is a collection of classes and other decls.
  * Essentially it is a whole program, plus other things.
  */
-class Unit : public Decl, Scoped
+class Unit : public Decl, public Scoped
 {
   protected:
     std::string m_name;
@@ -40,5 +40,10 @@ class Unit : public Decl, Scoped
     }
 
     virtual void print(size_t indent);
+
+    /* analysis */
+    /* stage 1 */
     void genSymTabs();
+
+    void regClass(Class *decl) override;
 };

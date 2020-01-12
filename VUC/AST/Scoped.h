@@ -17,6 +17,8 @@ the file "EULA.md", which should have been included with this file.
 #pragma once
 
 class Scope;
+class DimDecl;
+class Class;
 
 /* All nodes in which a new scope is introduced inherit from this class. */
 class Scoped
@@ -25,5 +27,10 @@ class Scoped
     Scope *m_scope;
 
   public:
-    Scoped(Scope *scope = nullptr);
+    Scoped() : m_scope(nullptr) {}
+
+    void initScope(Scope *parent = nullptr);
+
+    virtual void regClass(Class *decl);
+    virtual void regDim(DimDecl *decl);
 };

@@ -19,6 +19,7 @@ the file "EULA.md", which should have been included with this file.
 #include "AST/Module.h"
 #include "AST/Stmt.h"
 #include "AST/Unit.h"
+#include "Scope.h"
 
 void Unit::print(size_t indent)
 {
@@ -34,9 +35,19 @@ void Unit::print(size_t indent)
 
 void Unit::genSymTabs()
 {
+    initScope();
     for (auto d : m_body->getCode())
         d->genSymTabs(this, m_scope);
 }
+
+void Unit::regClass(Class *decl)
+{
+    Sym *sym = new Sym(decl->name(), Sym::Kind::evCls);
+    m_scope->reg(sym);
+    printf("registed class %s\n", decl->name().c_str());
+}
+
+std::string Module::name() const { return m_name; }
 
 void Class::print(size_t indent)
 {
@@ -51,7 +62,8 @@ void Class::print(size_t indent)
     std::cout << blanks(indent) << "]\n";
 }
 
-void Class::genSymTabs(Node *parent, Scope *superScope)
+void Class::genSymTabs(Scoped *parent, Scope *superScope)
 {
-    // std::cout << "generate class scope for " << m_name << "\n";
+    initScope(superScope);
+    std::cout << "generate class scope for " << m_name << "\n";
 }

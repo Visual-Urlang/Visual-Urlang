@@ -19,6 +19,7 @@ the file "EULA.md", which should have been included with this file.
 #include <iostream>
 
 #include "Position.h"
+#include "Scoped.h"
 
 class Scope;
 
@@ -37,7 +38,7 @@ class Node
 
     /* analysis */
     /* first step: generate symtabs */
-    virtual void genSymTabs(Node *superNode, Scope *superScope) {}
+    virtual void genSymTabs(Scoped *superNode, Scope *superScope) {}
 };
 
 inline Position Node::pos() const { return m_pos; }

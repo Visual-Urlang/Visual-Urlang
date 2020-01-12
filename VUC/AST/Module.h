@@ -19,11 +19,12 @@ the file "EULA.md", which should have been included with this file.
 #include <memory>
 
 #include "Decl.h"
+#include "Scoped.h"
 
 class CompoundStmt;
 
 /* A Module is either a class or a collection of other things instead. */
-class Module : public Decl
+class Module : public Decl, public Scoped
 {
   protected:
     /* Is this module imported from elsewhere? If so we only care about it as
@@ -43,6 +44,8 @@ class Module : public Decl
         : Decl(pos), m_modType(modType), m_name(name), m_body(body)
     {
     }
+
+    std::string name() const;
 };
 
 class Class : public Module
@@ -54,5 +57,5 @@ class Class : public Module
     }
 
     virtual void print(size_t indent);
-    virtual void genSymTabs(Node *superNode, Scope *superScope) override;
+    virtual void genSymTabs(Scoped *superNode, Scope *superScope) override;
 };

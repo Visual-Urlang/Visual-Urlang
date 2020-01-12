@@ -16,17 +16,26 @@ the file "EULA.md", which should have been included with this file.
 
 #include "Scope.h"
 #include "Scoped.h"
+#include <iostream>
 
-Scoped::Scoped(Scope *scope)
+void Scoped::initScope(Scope *super)
 {
-    if (!scope)
-        m_scope = new Scope(nullptr);
-    else
-        m_scope = scope;
+    m_scope = new Scope(super);
+    if (super)
+        super->addSubScope(this->m_scope);
 }
 
-Scope::Scope(Scope *super) : m_super(super)
+void Scoped::regClass(Class *decl) { std::cout << "unhandled regClass"; }
+
+void Scoped::regDim(DimDecl *decl) { std::cout << "unhandled regDim"; }
+
+void Scope::addSubScope(Scope *sub) { m_subScopes.push_back(sub); }
+
+void Scope::reg(Sym *sym) { m_syms.push_back(sym); }
+
+Sym *Scope::find(std::string name)
 {
-    if (super)
-        super->m_subScopes.push_back(this);
+    for (auto sym : m_syms)
+        if (sym->name() == name)
+            return sym;
 }
