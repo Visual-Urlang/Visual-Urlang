@@ -16,19 +16,57 @@ the file "EULA.md", which should have been included with this file.
 
 #pragma once
 
+#include <string>
 #include <vector>
 
-class CompoundStmt;
+class Sym
+{
+  public:
+    enum Kind
+    {
+        evCls,
+        evIVar,
+        evFun,
+        evLocal,
+        evArg,
+    };
 
-/* A unit is a collection of classes and other decls.
- * Essentially it is a whole program, plus other things.
- */
+  protected:
+    enum Kind m_kind;
+    /* Decl * m_decl ? Are all of these decls? All decls have types? */
+    std::string m_name;
+
+  public:
+    explicit Sym(std::string name, Sym::Kind symKind)
+        : m_name(name), m_kind(symKind)
+    {
+    }
+
+    /* is a class */
+    bool isCls() { return m_kind == evCls; }
+    /* any class member */
+    bool isClsMem() { return isIVar() | isFun(); }
+
+    /* class instance variable */
+    bool isIVar() { return m_kind == evIVar; }
+    /* meth/fun */
+    bool isFun() { return m_kind == evFun; }
+    /* local variable of function/meth or lambda scope */
+    bool isLocal() { return m_kind == evLocal; }
+    /* function or method argument */
+    bool isArg() { return m_kind == evArg; }
+};
+
 class Scope
 {
   protected:
     Scope *m_super;
     std::vector<Scope *> m_subScopes;
+    std::vector<Sym *> m_syms;
 
   public:
     Scope(Scope *super = nullptr);
+
+    void reg(Sym *);
+    Sym *find(std::string name);
 };

@@ -19,6 +19,7 @@ the file "EULA.md", which should have been included with this file.
 #include <string>
 
 #include "Decl.h"
+#include "Scoped.h"
 #include "Stmt.h"
 
 class CompoundStmt;
@@ -26,7 +27,7 @@ class CompoundStmt;
 /* A unit is a collection of classes and other decls.
  * Essentially it is a whole program, plus other things.
  */
-class Unit : public Decl
+class Unit : public Decl, Scoped
 {
   protected:
     std::string m_name;
@@ -39,4 +40,5 @@ class Unit : public Decl
     }
 
     virtual void print(size_t indent);
+    void genSymTabs();
 };

@@ -15,6 +15,15 @@ the file "EULA.md", which should have been included with this file.
 ********************************************************************/
 
 #include "Scope.h"
+#include "Scoped.h"
+
+Scoped::Scoped(Scope *scope)
+{
+    if (!scope)
+        m_scope = new Scope(nullptr);
+    else
+        m_scope = scope;
+}
 
 Scope::Scope(Scope *super) : m_super(super)
 {

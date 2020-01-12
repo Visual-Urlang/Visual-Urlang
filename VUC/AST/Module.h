@@ -54,4 +54,5 @@ class Class : public Module
     }
 
     virtual void print(size_t indent);
+    virtual void genSymTabs(Node *superNode, Scope *superScope) override;
 };

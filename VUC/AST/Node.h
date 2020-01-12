@@ -20,6 +20,8 @@ the file "EULA.md", which should have been included with this file.
 
 #include "Position.h"
 
+class Scope;
+
 class Node
 {
   protected:
@@ -32,6 +34,10 @@ class Node
     Position pos() const;
 
     virtual void print(size_t indent);
+
+    /* analysis */
+    /* first step: generate symtabs */
+    virtual void genSymTabs(Node *superNode, Scope *superScope) {}
 };
 
 inline Position Node::pos() const { return m_pos; }

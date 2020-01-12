@@ -99,5 +99,8 @@
     <ClInclude Include="AST\Scope.h">
       <Filter>Header Files\AST</Filter>
     </ClInclude>
+    <ClInclude Include="AST\Scoped.h">
+      <Filter>Header Files\AST</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

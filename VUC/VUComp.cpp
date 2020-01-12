@@ -69,6 +69,7 @@ void parseFile(bool trace, std::string fName)
         ;
     parser->parse(TOK_EOF);
 
+    parser->mod()->genSymTabs();
     parser->mod()->print(0);
 }
 

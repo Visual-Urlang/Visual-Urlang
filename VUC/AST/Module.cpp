@@ -32,6 +32,12 @@ void Unit::print(size_t indent)
     std::cout << blanks(indent) << "]\n";
 }
 
+void Unit::genSymTabs()
+{
+    for (auto d : m_body->getCode())
+        d->genSymTabs(this, m_scope);
+}
+
 void Class::print(size_t indent)
 {
     std::cout << blanks(indent) << "[class module: " << m_name << "\n"
@@ -43,4 +49,9 @@ void Class::print(size_t indent)
     }
 
     std::cout << blanks(indent) << "]\n";
+}
+
+void Class::genSymTabs(Node *parent, Scope *superScope)
+{
+    // std::cout << "generate class scope for " << m_name << "\n";
 }
