@@ -26,7 +26,22 @@ void DimDecl::print(size_t indent)
               << "]";
 }
 
-void FunctionDecl::print(size_t indent)
+void DimDecl::genSymTabs(Scoped *superNode, Scope *superScope)
+{
+    superNode->regDim(this);
+}
+
+void FunDecl::genSymTabs(Scoped *superNode, Scope *superScope)
+{
+    initScope(superScope);
+    superNode->regFun(this);
+    for (auto p : m_formals)
+        p->genSymTabs(this, m_scope);
+    for (auto n : m_code->getCode())
+        n->genSymTabs(this, m_scope);
+}
+
+void FunDecl::print(size_t indent)
 {
     std::cout << blanks(indent) << "[FunDecl: " << m_name << " rtype: "
               << "blanktype\n";

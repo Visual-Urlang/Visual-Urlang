@@ -55,7 +55,7 @@ class Sym
     bool isFun() { return m_kind == evFun; }
     /* local variable of function/meth or lambda scope */
     bool isLocal() { return m_kind == evLocal; }
-    /* function or method argument */
+    /* function/meth or lambda argument */
     bool isArg() { return m_kind == evArg; }
 };
 

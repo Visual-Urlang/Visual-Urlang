@@ -14,9 +14,11 @@ the file "EULA.md", which should have been included with this file.
               All rights reserved.
 ********************************************************************/
 
+#include <iostream>
+
+#include "Decl.h"
 #include "Scope.h"
 #include "Scoped.h"
-#include <iostream>
 
 void Scoped::initScope(Scope *super)
 {
@@ -29,6 +31,12 @@ void Scoped::regClass(Class *decl) { std::cout << "unhandled regClass"; }
 
 void Scoped::regDim(DimDecl *decl) { std::cout << "unhandled regDim"; }
 
+void Scoped::regFun(FunDecl *fun)
+{
+    Sym *fSym = new Sym(fun->name(), Sym::Kind::evFun);
+    m_scope->reg(fSym);
+}
+
 void Scope::addSubScope(Scope *sub) { m_subScopes.push_back(sub); }
 
 void Scope::reg(Sym *sym) { m_syms.push_back(sym); }
@@ -38,4 +46,5 @@ Sym *Scope::find(std::string name)
     for (auto sym : m_syms)
         if (sym->name() == name)
             return sym;
+    return nullptr;
 }

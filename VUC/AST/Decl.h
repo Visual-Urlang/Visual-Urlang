@@ -16,6 +16,7 @@ the file "EULA.md", which should have been included with this file.
 
 #pragma once
 
+#include <string>
 #include <vector>
 
 #include "Node.h"
@@ -37,6 +38,8 @@ class NamedDecl : public Decl
 
   public:
     NamedDecl(Position pos, std::string name) : Decl(pos), m_name(name) {}
+
+    std::string name() const { return m_name; }
 };
 
 /* a variable declaration */
@@ -52,6 +55,8 @@ class DimDecl : public NamedDecl
     }
 
     virtual void print(size_t indent);
+
+    void genSymTabs(Scoped *superNode, Scope *superScope) override;
 };
 
 class ParamDecl : public DimDecl
@@ -63,20 +68,21 @@ class ParamDecl : public DimDecl
     }
 };
 
-class FunctionDecl : public NamedDecl
+class FunDecl : public NamedDecl, public Scoped
 {
     std::vector<ParamDecl *> m_formals;
     TypeLoc *m_rType;
     CompoundStmt *m_code;
 
   public:
-    FunctionDecl(Position pos, std::string name,
-                 std::vector<ParamDecl *> paramDecls, TypeLoc *type,
-                 CompoundStmt *code)
+    FunDecl(Position pos, std::string name, std::vector<ParamDecl *> paramDecls,
+            TypeLoc *type, CompoundStmt *code)
         : NamedDecl(pos, name), m_formals(paramDecls), m_rType(type),
           m_code(code)
     {
     }
+
+    void genSymTabs(Scoped *superNode, Scope *superScope) override;
 
     virtual void print(size_t indent);
 };

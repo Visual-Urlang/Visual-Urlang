@@ -49,6 +49,8 @@ COMMENT \"(\\.|[^"])*\"
 "Dim"           { prs(DIM); }
 "End"           { prs(END); }
 "Function"      { prs(FUNCTION); }
+"Inherits"      { prs(INHERITS); }
+"Of"            { prs(OF); }
 "Public"        { prs(PUBLIC); }
 
 "Integer"       { prs(INTEGER); }

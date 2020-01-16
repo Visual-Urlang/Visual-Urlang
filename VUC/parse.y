@@ -115,8 +115,22 @@ opt_signature
 opt_signature
 	::= .
 
+%type signature { std::vector<Token> }
+%type ofdecl_list { std::vector<Token> }
+
 signature
-	::= SIGNATURE.
+	::= OF ofdecl_list.
+
+ofdecl_list(L)
+	::= IDENTIFIER(i). { L = std::vector<Token>({i}); }
+
+opt_inherits_list
+	::= inherits_list.
+opt_inherits_list
+	::= .
+
+inherits_list
+	::= INHERITS type_name_list eols.
 
 eol
 	::= EOL.
@@ -127,7 +141,10 @@ eols
 	::= eols eol.
 
 cls_stmt(C)
-	::= opt_visibility_spec CLASS IDENTIFIER(i) opt_signature eols block_stmt_list(l) eols END CLASS.
+	::= opt_visibility_spec CLASS IDENTIFIER(i) opt_signature eols 
+		opt_inherits_list
+		block_stmt_list(l) eols 
+		END CLASS.
 	{
 		C = new Class(pos(), i.stringValue, l);
 	}
@@ -136,7 +153,7 @@ func_stmt(F)
 	::= opt_visibility_spec FUNCTION IDENTIFIER(n) 
 		opt_param_list(p) opt_as_clause(t) EOL block_stmt_list(l) EOL END FUNCTION.
 		{
-			F = new FunctionDecl(pos(), n.stringValue, p, new TypeLoc(t), l);
+			F = new FunDecl(pos(), n.stringValue, p, new TypeLoc(t), l);
 		}
 
 %type block_stmt_list { CompoundStmt * }
@@ -457,7 +474,7 @@ primary_type_name(T)
 generic_type_binding
 	::= primary_type_name.
 generic_type_binding
-	::= primary_type_name LBRACKET type_name_list RBRACKET.
+	::= primary_type_name LBRACKET OF type_name_list RBRACKET.
 
 postfix_type_name
 	::= generic_type_binding DOT generic_type_binding .
