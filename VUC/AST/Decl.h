@@ -28,6 +28,12 @@ class Decl : public Node
 {
   public:
     explicit Decl(Position pos) : Node(pos) {}
+
+    /* 2nd step analysis */
+    virtual void resolveDeclTypes()
+    {
+        std::cout << "Unimplemented resolveDeclTypes";
+    }
 };
 
 /* any decl with a name */

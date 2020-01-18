@@ -470,21 +470,23 @@ primary_type_name(T)
 	::= IDENTIFIER(i). { T = new IdTypeRepr(pos(), i.stringValue); }
 primary_type_name(T)
 	::= LBRACKET type_name(t) RBRACKET. { T = t; }
+primary_type_name(T)
+	::= primary_type_name(t) LBRACKET OF type_name_list(l) RBRACKET.
+	{
+		T = new GenericTypeInstRepr(pos(), t, l);
+	}
+primary_type_name(T)
+	::= primary_type_name(t) DOT IDENTIFIER(i).
+	{
+		T = new DotTypeRepr(pos(), new IdTypeRepr(pos(), i.stringValue), t);
+	}
 
-generic_type_binding
-	::= primary_type_name.
-generic_type_binding
-	::= primary_type_name LBRACKET OF type_name_list RBRACKET.
+%type type_name_list { std::vector<TypeRepr *> }
 
-postfix_type_name
-	::= generic_type_binding DOT generic_type_binding .
-postfix_type_name
-	::= generic_type_binding .
-
-type_name_list
-	::= type_name.
-type_name_list
-	::= type_name_list COMMA type_name.
+type_name_list(L)
+	::= type_name(t). { L = std::vector<TypeRepr *>({t}); }
+type_name_list(L)
+	::= type_name_list(l) COMMA type_name(t). { (L = l).push_back(t); }
 
 type_name
-	::= postfix_type_name.
+	::= primary_type_name.

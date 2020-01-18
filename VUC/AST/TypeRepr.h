@@ -16,6 +16,7 @@ the file "EULA.md", which should have been included with this file.
 
 #pragma once
 
+#include "Expr.h"
 #include "Node.h"
 
 class TypeRepr : public Node
@@ -56,4 +57,29 @@ class IdTypeRepr : public TypeRepr
 
   public:
     IdTypeRepr(Position pos, std::string id) : TypeRepr(pos), m_id(id) {}
+};
+
+class DotTypeRepr : public TypeRepr
+{
+    IdTypeRepr *m_member;
+    TypeRepr *m_base;
+
+  public:
+    DotTypeRepr(Position _pos, IdTypeRepr *member, TypeRepr *base)
+        : TypeRepr(_pos), m_member(member), m_base(base)
+    {
+    }
+};
+
+class GenericTypeInstRepr : public TypeRepr
+{
+    TypeRepr *m_base;
+    std::vector<TypeRepr *> m_args;
+
+  public:
+    GenericTypeInstRepr(Position pos, TypeRepr *base,
+                        std::vector<TypeRepr *> typeReprs)
+        : TypeRepr(pos), m_base(base), m_args(typeReprs)
+    {
+    }
 };

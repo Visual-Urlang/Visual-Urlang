@@ -16,6 +16,10 @@ the file "EULA.md", which should have been included with this file.
 
 #pragma once
 
+#include <vector>
+
+class Class;
+
 class Type
 {
 };
@@ -24,4 +28,11 @@ class Type
  * Strings etc are actually resolved to the real type of e.g. String class. */
 class BuiltinType : public Type
 {
+};
+
+/* Instantiated type*/
+class ClassInstType : public Type
+{
+    Class *m_class;
+    std::vector<Type *> m_params;
 };
