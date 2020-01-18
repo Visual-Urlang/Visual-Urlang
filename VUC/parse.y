@@ -488,5 +488,5 @@ type_name_list(L)
 type_name_list(L)
 	::= type_name_list(l) COMMA type_name(t). { (L = l).push_back(t); }
 
-type_name
-	::= primary_type_name.
+type_name(T)
+	::= primary_type_name(t). { T = t; }

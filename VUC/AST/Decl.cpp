@@ -54,8 +54,9 @@ void FunDecl::genSymTabs(Scoped *superNode, Scope *superScope)
 
 void FunDecl::print(size_t indent)
 {
-    std::cout << blanks(indent) << "[FunDecl: " << m_name << " rtype: "
-              << "blanktype\n";
+    std::cout << blanks(indent) << "[FunDecl: " << m_name << " rtype: ";
+    m_rType->print(indent);
+    std::cout << "\n";
     m_code->print(indent + 2);
     std::cout << "\n" << blanks(indent) << "]";
 }

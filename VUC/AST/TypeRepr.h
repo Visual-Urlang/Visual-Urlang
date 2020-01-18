@@ -16,6 +16,8 @@ the file "EULA.md", which should have been included with this file.
 
 #pragma once
 
+#include <vector>
+
 #include "Expr.h"
 #include "Node.h"
 
@@ -49,6 +51,8 @@ class BuiltinTypeRepr : public TypeRepr
         : TypeRepr(pos), m_builtinKind(builtinKind)
     {
     }
+
+    virtual void print(size_t indent);
 };
 
 class IdTypeRepr : public TypeRepr
@@ -57,6 +61,8 @@ class IdTypeRepr : public TypeRepr
 
   public:
     IdTypeRepr(Position pos, std::string id) : TypeRepr(pos), m_id(id) {}
+
+    virtual void print(size_t indent);
 };
 
 class DotTypeRepr : public TypeRepr
@@ -69,6 +75,8 @@ class DotTypeRepr : public TypeRepr
         : TypeRepr(_pos), m_member(member), m_base(base)
     {
     }
+
+    virtual void print(size_t indent);
 };
 
 class GenericTypeInstRepr : public TypeRepr
@@ -82,4 +90,6 @@ class GenericTypeInstRepr : public TypeRepr
         : TypeRepr(pos), m_base(base), m_args(typeReprs)
     {
     }
+
+    virtual void print(size_t indent);
 };

@@ -28,4 +28,6 @@ class TypeLoc
   public:
     explicit TypeLoc() {}
     explicit TypeLoc(TypeRepr *repr) : m_repr(repr) {}
+
+    void print(size_t indent);
 };
