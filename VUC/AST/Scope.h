@@ -19,6 +19,8 @@ the file "EULA.md", which should have been included with this file.
 #include <string>
 #include <vector>
 
+class Decl;
+
 class Sym
 {
   public:
@@ -33,12 +35,12 @@ class Sym
 
   protected:
     enum Kind m_kind;
-    /* Decl * m_decl ? Are all of these decls? All decls have types? */
     std::string m_name;
+    Decl *m_decl; /*? Are all of these decls? All decls have types? */
 
   public:
-    explicit Sym(std::string name, Sym::Kind symKind)
-        : m_name(name), m_kind(symKind)
+    explicit Sym(std::string name, Decl *decl, Sym::Kind symKind)
+        : m_name(name), m_kind(symKind), m_decl(decl)
     {
     }
 

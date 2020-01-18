@@ -42,7 +42,7 @@ void Unit::genSymTabs()
 
 void Unit::regClass(Class *decl)
 {
-    Sym *sym = new Sym(decl->name(), Sym::Kind::evCls);
+    Sym *sym = new Sym(decl->name(), decl, Sym::Kind::evCls);
     m_scope->reg(sym);
     printf("registed class %s\n", decl->name().c_str());
 }

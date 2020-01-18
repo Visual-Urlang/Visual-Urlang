@@ -27,14 +27,20 @@ void Scoped::initScope(Scope *super)
         super->addSubScope(this->m_scope);
 }
 
-void Scoped::regClass(Class *decl) { std::cout << "unhandled regClass"; }
+void Scoped::regClass(Class *decl) { std::cout << "unhandled regClass\n"; }
 
-void Scoped::regDim(DimDecl *decl) { std::cout << "unhandled regDim"; }
+void Scoped::regDim(DimDecl *decl) { std::cout << "unhandled regDim\n"; }
 
 void Scoped::regFun(FunDecl *fun)
 {
-    Sym *fSym = new Sym(fun->name(), Sym::Kind::evFun);
+    Sym *fSym = new Sym(fun->name(), fun, Sym::Kind::evFun);
     m_scope->reg(fSym);
+}
+
+void Scoped::regArg(ParamDecl *param)
+{
+    Sym *pSym = new Sym(param->name(), param, Sym::Kind::evArg);
+    m_scope->reg(pSym);
 }
 
 void Scope::addSubScope(Scope *sub) { m_subScopes.push_back(sub); }

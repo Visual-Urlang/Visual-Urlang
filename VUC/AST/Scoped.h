@@ -19,6 +19,7 @@ the file "EULA.md", which should have been included with this file.
 class Scope;
 class DimDecl;
 class FunDecl;
+class ParamDecl;
 class Class;
 
 /* All nodes in which a new scope is introduced inherit from this class. */
@@ -32,6 +33,8 @@ class Scoped
 
     void initScope(Scope *parent = nullptr);
 
+    /* register a funarg */
+    virtual void regArg(ParamDecl *param);
     virtual void regClass(Class *decl);
     virtual void regDim(DimDecl *decl);
     virtual void regFun(FunDecl *fun);

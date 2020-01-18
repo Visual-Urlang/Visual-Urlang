@@ -56,7 +56,7 @@ class DimDecl : public NamedDecl
 
     virtual void print(size_t indent);
 
-    void genSymTabs(Scoped *superNode, Scope *superScope) override;
+    virtual void genSymTabs(Scoped *superNode, Scope *superScope) override;
 };
 
 class ParamDecl : public DimDecl
@@ -66,6 +66,8 @@ class ParamDecl : public DimDecl
         : DimDecl(pos, name, typeLoc)
     {
     }
+
+    void genSymTabs(Scoped *superNode, Scope *superScope) override;
 };
 
 class FunDecl : public NamedDecl, public Scoped
@@ -83,6 +85,7 @@ class FunDecl : public NamedDecl, public Scoped
     }
 
     void genSymTabs(Scoped *superNode, Scope *superScope) override;
+    virtual void regDim(DimDecl *decl) override;
 
-    virtual void print(size_t indent);
+    virtual void print(size_t indent) override;
 };

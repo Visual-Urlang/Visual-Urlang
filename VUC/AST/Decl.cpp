@@ -18,6 +18,7 @@ the file "EULA.md", which should have been included with this file.
 
 #include "AST/Decl.h"
 #include "AST/Stmt.h"
+#include "Scope.h"
 
 void DimDecl::print(size_t indent)
 {
@@ -29,6 +30,16 @@ void DimDecl::print(size_t indent)
 void DimDecl::genSymTabs(Scoped *superNode, Scope *superScope)
 {
     superNode->regDim(this);
+}
+
+void ParamDecl::genSymTabs(Scoped *superNode, Scope *superScope)
+{
+    superNode->regArg(this);
+}
+
+void FunDecl::regDim(DimDecl *decl)
+{
+    m_scope->reg(new Sym(decl->name(), decl, Sym::Kind::evLocal));
 }
 
 void FunDecl::genSymTabs(Scoped *superNode, Scope *superScope)
