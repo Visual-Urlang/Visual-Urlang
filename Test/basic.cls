@@ -5,9 +5,9 @@ Public Class aClass Of T
 End Class
 
 Public Class aTwoClass Of T
-    Inherits aClass(Of T2)
+    Inherits aClass(Of T)
 
-    Public Function a2cTest As X (Of Y)
+    Public Function a2cTest As T (Of Y)
         Dim a_c As aClass(Of String)
         aClass.do hello, world
     End Function

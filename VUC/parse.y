@@ -129,8 +129,29 @@ opt_inherits_list
 opt_inherits_list
 	::= .
 
-inherits_list
-	::= INHERITS type_name_list eols.
+%type opt_inherits_list { std::vector<TypeLoc *> }
+%type opt_implements_list { std::vector<TypeLoc *> }
+%type inherits_list { std::vector<TypeLoc *> }
+%type implements_list { std::vector<TypeLoc *> }
+%type type_loc_list { std::vector<TypeLoc *> }
+
+inherits_list(L)
+	::= INHERITS type_loc_list(l) eols. { L = l; }
+
+opt_implements_list
+	::= implements_list.
+opt_implements_list
+	::= .
+
+implements_list(L)
+	::= IMPLEMENTS type_loc_list(l) eols. { L = l; }
+
+type_loc_list(L)
+	::= type_name_list(l).
+	{
+		std::transform(l.begin(), l.end(), std::back_inserter(L),
+			[](TypeRepr * i) { return new TypeLoc(i); } );
+	}
 
 eol
 	::= EOL.
@@ -142,11 +163,12 @@ eols
 
 cls_stmt(C)
 	::= opt_visibility_spec CLASS IDENTIFIER(i) opt_signature eols 
-		opt_inherits_list
-		block_stmt_list(l) eols 
+		opt_inherits_list(inh)
+		opt_implements_list(imp)
+		block_stmt_list(code) eols
 		END CLASS.
 	{
-		C = new Class(pos(), i.stringValue, l);
+		C = new Class(pos(), i.stringValue, inh, imp, code);
 	}
 
 func_stmt(F)

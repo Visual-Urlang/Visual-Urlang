@@ -79,8 +79,8 @@ int main(int argc, char *argv[])
     bool trace = false;
 
     std::cout
-        << "Visual Urlang (TM) Compiler version " VERSTR "\n"
-           "Copyright (C) The Visual Urlang Project. All rights reserved.\n"
+        << "WebScale Object Solutions (TM) Urlang Compiler version " VERSTR "\n"
+           "Copyright (C) WebScale Object Solutions. All rights reserved.\n"
            "Use is subject to license terms.\n\n";
 
     initFlagVals();

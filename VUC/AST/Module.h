@@ -50,9 +50,16 @@ class Module : public Decl, public Scoped
 
 class Class : public Module
 {
+    /* Superclasses */
+    std::vector<TypeLoc *> m_inherits;
+    /* Interfaces implemented */
+    std::vector<TypeLoc *> m_implements;
+
   public:
-    Class(Position pos, std::string name, CompoundStmt *body)
-        : Module(pos, evClass, name, body)
+    Class(Position pos, std::string name, std::vector<TypeLoc *> inherits,
+          std::vector<TypeLoc *> implements, CompoundStmt *body)
+        : Module(pos, evClass, name, body), m_inherits(inherits),
+          m_implements(implements)
     {
     }
 
