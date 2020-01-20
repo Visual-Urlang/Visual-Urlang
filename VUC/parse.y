@@ -105,7 +105,7 @@ Position VU_Parser::pos()
 file ::= module EOF.
 
 module
-	::= block_stmt_list(l).
+	::= opt_eols block_stmt_list(l) opt_eols.
 	{
 		m_mod = new Unit("-a-unit-", l);
 	}
@@ -123,6 +123,8 @@ signature
 
 ofdecl_list(L)
 	::= IDENTIFIER(i). { L = std::vector<Token>({i}); }
+ofdecl_list(L)
+	::= ofdecl_list(l) COMMA IDENTIFIER(i). { (L = l).push_back(i); }
 
 opt_inherits_list
 	::= inherits_list.
@@ -156,6 +158,11 @@ type_loc_list(L)
 eol
 	::= EOL.
 
+opt_eols
+	::= eols.
+opt_eols
+	::= .
+
 eols
 	::= eol.
 eols
@@ -165,7 +172,7 @@ cls_stmt(C)
 	::= opt_visibility_spec CLASS IDENTIFIER(i) opt_signature eols 
 		opt_inherits_list(inh)
 		opt_implements_list(imp)
-		block_stmt_list(code) eols
+		opt_block_stmt_list(code)
 		END CLASS.
 	{
 		C = new Class(pos(), i.stringValue, inh, imp, code);
@@ -178,7 +185,13 @@ func_stmt(F)
 			F = new FunDecl(pos(), n.stringValue, p, new TypeLoc(t), l);
 		}
 
+%type opt_block_stmt_list { CompoundStmt * }
 %type block_stmt_list { CompoundStmt * }
+
+opt_block_stmt_list(L)
+	::= block_stmt_list(l) eols. { L = l; }
+opt_block_stmt_list(L)
+	::= . { L = new CompoundStmt(pos(), {}); }
 
 block_stmt_list(L)
 	::= block_stmt(s). { L = new CompoundStmt(pos(), {s}); }
@@ -203,22 +216,25 @@ block_stmt(B)
 %type param_list { std::vector<ParamDecl *> }
 
 opt_param_list
-	::= param_list.
+	::= LBRACKET param_list RBRACKET.
 opt_param_list
 	::= .
 
 param_list(P)
-	::= variable_decl_part(p). 
+	::= pass_style variable_decl_part(p). 
 	{
 		auto decl = new ParamDecl(pos(), std::get<0>(p).stringValue, TypeLoc(std::get<1>(p)));
 		P = std::vector<ParamDecl *>({decl}); 
 	}
 param_list(P)
-	::= param_list(l) variable_decl_part(p).
+	::= param_list(l) pass_style variable_decl_part(p).
 	{
 		auto decl = new ParamDecl(pos(), std::get<0>(p).stringValue, TypeLoc(std::get<1>(p)));
 		(P = l).push_back({decl}); 
 	}
+
+pass_style ::= BYVAL.
+pass_style ::= BYREF.
 
 opt_visibility_spec
 	::= visibility_spec.

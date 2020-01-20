@@ -44,6 +44,8 @@ class Unit : public Decl, public Scoped
     /* analysis */
     /* stage 1 */
     void genSymTabs();
+    /* stage 2 */
+    virtual void resolveInheritance(Scoped *superNode);
 
     void regClass(Class *decl) override;
 };

@@ -39,6 +39,12 @@ class Node
     /* analysis */
     /* first step: generate symtabs */
     virtual void genSymTabs(Scoped *superNode, Scope *superScope) {}
+    /* second step: resolve implements/inherits */
+    virtual void resolveInheritance(Scoped *superNode)
+    {
+        std::cout << "unresolved resolveInheritance in " << typeid(*this).name()
+                  << "\n";
+    }
 };
 
 inline Position Node::pos() const { return m_pos; }

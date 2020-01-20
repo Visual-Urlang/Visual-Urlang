@@ -44,6 +44,8 @@ COMMENT \"(\\.|[^"])*\"
 {NEWLINE}           { yyextra->parse(TOK_EOL); }
 
 "As"            { prs(AS); }
+"ByVal"         { prs(BYVAL); }
+"ByRef"         { prs(BYREF); }
 "Call"          { yyextra->parse(TOK_CALL); }
 "Class"         { prs(CLASS); }
 "Dim"           { prs(DIM); }

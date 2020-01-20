@@ -40,6 +40,12 @@ void Unit::genSymTabs()
         d->genSymTabs(this, m_scope);
 }
 
+void Unit::resolveInheritance(Scoped *superNode)
+{
+    for (auto d : m_body->getCode())
+        d->resolveInheritance(this);
+}
+
 void Unit::regClass(Class *decl)
 {
     Sym *sym = new Sym(decl->name(), decl, Sym::Kind::evCls);
