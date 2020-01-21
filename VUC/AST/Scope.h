@@ -31,6 +31,7 @@ class Sym
         evFun,
         evLocal,
         evArg,
+        evTypeParam,
     };
 
   protected:
@@ -45,6 +46,7 @@ class Sym
     }
 
     std::string name() const { return m_name; }
+    Decl *decl() { return m_decl; }
 
     /* is a class */
     bool isCls() { return m_kind == evCls; }
@@ -59,6 +61,8 @@ class Sym
     bool isLocal() { return m_kind == evLocal; }
     /* function/meth or lambda argument */
     bool isArg() { return m_kind == evArg; }
+    /* type parameter to class */
+    bool isTypeParam() { return m_kind == evTypeParam; }
 };
 
 class Scope

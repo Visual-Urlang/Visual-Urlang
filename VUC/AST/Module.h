@@ -54,12 +54,15 @@ class Class : public Module
     std::vector<TypeLoc *> m_inherits;
     /* Interfaces implemented */
     std::vector<TypeLoc *> m_implements;
+    /* Generic type parameters */
+    std::vector<TypeParamDecl *> m_params;
 
   public:
     Class(Position pos, std::string name, std::vector<TypeLoc *> inherits,
-          std::vector<TypeLoc *> implements, CompoundStmt *body)
+          std::vector<TypeLoc *> implements,
+          std::vector<TypeParamDecl *> params, CompoundStmt *body)
         : Module(pos, evClass, name, body), m_inherits(inherits),
-          m_implements(implements)
+          m_implements(implements), m_params(params)
     {
     }
 

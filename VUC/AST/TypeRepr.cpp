@@ -16,6 +16,7 @@ the file "EULA.md", which should have been included with this file.
 
 #include <iostream>
 
+#include "Module.h"
 #include "Scope.h"
 #include "TypeLoc.h"
 #include "TypeRepr.h"
@@ -49,7 +50,15 @@ Type *IdTypeRepr::resolveInScope(Scope *aScope)
 {
     Sym *aSym = aScope->find(m_id);
     if (!aSym)
+    {
         std::cout << "unresolved typerepr: " << m_id << "\n";
+        return nullptr;
+    }
+
+    if (aSym->isCls())
+    {
+        return new ClassInstType(dynamic_cast<Class *>(aSym->decl()), {});
+    }
     else
         std::cout << "sym: " << aSym->name() << "\n";
     return nullptr;
@@ -72,6 +81,16 @@ void DotTypeRepr::print(size_t indent)
 Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
 {
     Type *base = m_base->resolveInScope(aScope);
+    if (ClassInstType *bCls = dynamic_cast<ClassInstType *>(base))
+    {
+        for (auto p : m_args)
+            bCls->addArg(p->resolveInScope(aScope));
+        return bCls;
+    }
+    else
+    {
+        std::cout << "error: Base is not a class.";
+    }
     return nullptr;
 }
 

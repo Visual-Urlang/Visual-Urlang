@@ -48,6 +48,12 @@ class NamedDecl : public Decl
     std::string name() const { return m_name; }
 };
 
+class TypeParamDecl : public NamedDecl
+{
+  public:
+    TypeParamDecl(Position pos, std::string name) : NamedDecl(pos, name) {}
+};
+
 /* a variable declaration */
 class DimDecl : public NamedDecl
 {

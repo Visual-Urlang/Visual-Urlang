@@ -22,6 +22,7 @@ class Class;
 
 class Type
 {
+    virtual void print() { std::cout << "unknown type"; }
 };
 
 /* A basic type such as Integer, Short, etc.
@@ -35,4 +36,12 @@ class ClassInstType : public Type
 {
     Class *m_class;
     std::vector<Type *> m_params;
+
+  public:
+    ClassInstType(Class *class_, std::vector<Type *> params)
+        : m_class(class_), m_params(params)
+    {
+    }
+
+    void addArg(Type *anArg) { m_params.push_back(anArg); }
 };

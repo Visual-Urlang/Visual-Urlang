@@ -115,16 +115,17 @@ opt_signature
 opt_signature
 	::= .
 
-%type signature { std::vector<Token> }
-%type ofdecl_list { std::vector<Token> }
+%type opt_signature { std::vector<TypeParamDecl *> }
+%type signature { std::vector<TypeParamDecl *> }
+%type ofdecl_list { std::vector<TypeParamDecl *> }
 
-signature
-	::= OF ofdecl_list.
+signature(S)
+	::= OF ofdecl_list(l). { S = l; }
 
 ofdecl_list(L)
-	::= IDENTIFIER(i). { L = std::vector<Token>({i}); }
+	::= IDENTIFIER(i). { L = std::vector<TypeParamDecl *>({new TypeParamDecl(pos(), i.stringValue)}); }
 ofdecl_list(L)
-	::= ofdecl_list(l) COMMA IDENTIFIER(i). { (L = l).push_back(i); }
+	::= ofdecl_list(l) COMMA IDENTIFIER(i). { (L = l).push_back(new TypeParamDecl(pos(), i.stringValue)); }
 
 opt_inherits_list
 	::= inherits_list.
@@ -169,13 +170,13 @@ eols
 	::= eols eol.
 
 cls_stmt(C)
-	::= opt_visibility_spec CLASS IDENTIFIER(i) opt_signature eols 
+	::= opt_visibility_spec CLASS IDENTIFIER(i) opt_signature(sig) eols 
 		opt_inherits_list(inh)
 		opt_implements_list(imp)
 		opt_block_stmt_list(code)
 		END CLASS.
 	{
-		C = new Class(pos(), i.stringValue, inh, imp, code);
+		C = new Class(pos(), i.stringValue, inh, imp, sig, code);
 	}
 
 func_stmt(F)
