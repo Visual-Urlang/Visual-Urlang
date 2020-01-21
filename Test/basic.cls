@@ -8,10 +8,15 @@ Public Class Association Of K, V
 End Class
 
 Public Class Dictionary Of K, V
-    Inherits Set(Of K, V)
+    Inherits Set(Of Association(Of K, V))
 
-    Public Function a2cTest As T (Of Y)
-        Dim a_c As aClass(Of String)
-        aClass.do hello, world
+    Public Function test As K (Of Y)
+        print i
+    End Function
+End Class
+
+Public Class Main
+    Public Function Main 
+        Dim aDict As Dictionary(Of String, Integer)
     End Function
 End Class

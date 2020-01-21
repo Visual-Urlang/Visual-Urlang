@@ -29,5 +29,9 @@ class TypeLoc
     explicit TypeLoc() {}
     explicit TypeLoc(TypeRepr *repr) : m_repr(repr) {}
 
+    TypeRepr *repr() { return m_repr; }
+
+    void resolveInScope(Scope *aScope);
+
     void print(size_t indent);
 };

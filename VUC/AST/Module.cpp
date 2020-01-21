@@ -71,7 +71,14 @@ void Class::print(size_t indent)
 void Class::genSymTabs(Scoped *parent, Scope *superScope)
 {
     initScope(superScope);
+    parent->regClass(this);
     for (auto d : m_body->getCode())
         d->genSymTabs(this, m_scope);
-    std::cout << "generate class scope for " << m_name << "\n";
+    std::cout << "generated class scope for " << m_name << "\n";
+}
+
+void Class::resolveInheritance(Scoped *superNode)
+{
+    for (auto d : m_inherits)
+        d->resolveInScope(m_scope);
 }

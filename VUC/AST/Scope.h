@@ -71,6 +71,8 @@ class Scope
   public:
     Scope(Scope *super = nullptr) : m_super(super) {}
 
+    Scope *superScope() { return m_super; }
+
     void addSubScope(Scope *sub);
     void reg(Sym *sym);
     Sym *find(std::string name);

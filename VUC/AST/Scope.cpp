@@ -52,5 +52,5 @@ Sym *Scope::find(std::string name)
     for (auto sym : m_syms)
         if (sym->name() == name)
             return sym;
-    return nullptr;
+    return m_super ? m_super->find(name) : nullptr;
 }

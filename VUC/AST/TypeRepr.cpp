@@ -16,8 +16,14 @@ the file "EULA.md", which should have been included with this file.
 
 #include <iostream>
 
+#include "Scope.h"
 #include "TypeLoc.h"
 #include "TypeRepr.h"
+
+void TypeLoc::resolveInScope(Scope *aScope)
+{
+    m_type = m_repr->resolveInScope(aScope);
+}
 
 void TypeLoc::print(size_t indent)
 {
@@ -27,9 +33,26 @@ void TypeLoc::print(size_t indent)
         std::cout << "<empty-typeloc>";
 }
 
+Type *TypeRepr::resolveInScope(Scope *aScope)
+{
+    std::cout << "Unimplemented TypeRepr::resolveInScope in class "
+              << typeid(*this).name() << "\n";
+    return nullptr;
+}
+
 void BuiltinTypeRepr::print(size_t indent)
 {
     std::cout << "(Builtin-type: " << m_builtinKind << ")";
+}
+
+Type *IdTypeRepr::resolveInScope(Scope *aScope)
+{
+    Sym *aSym = aScope->find(m_id);
+    if (!aSym)
+        std::cout << "unresolved typerepr: " << m_id << "\n";
+    else
+        std::cout << "sym: " << aSym->name() << "\n";
+    return nullptr;
 }
 
 void IdTypeRepr::print(size_t indent)
@@ -44,6 +67,12 @@ void DotTypeRepr::print(size_t indent)
     std::cout << ").";
     m_member->print(indent);
     std::cout << ")";
+}
+
+Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
+{
+    Type *base = m_base->resolveInScope(aScope);
+    return nullptr;
 }
 
 void GenericTypeInstRepr::print(size_t indent)

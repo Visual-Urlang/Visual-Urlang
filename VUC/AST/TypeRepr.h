@@ -25,6 +25,8 @@ class TypeRepr : public Node
 {
   public:
     explicit TypeRepr(Position pos) : Node(pos) {}
+
+    virtual Type *resolveInScope(Scope *aScope);
 };
 
 /* A builtin type. */
@@ -62,6 +64,8 @@ class IdTypeRepr : public TypeRepr
   public:
     IdTypeRepr(Position pos, std::string id) : TypeRepr(pos), m_id(id) {}
 
+    virtual Type *resolveInScope(Scope *aScope);
+
     virtual void print(size_t indent);
 };
 
@@ -90,6 +94,8 @@ class GenericTypeInstRepr : public TypeRepr
         : TypeRepr(pos), m_base(base), m_args(typeReprs)
     {
     }
+
+    virtual Type *resolveInScope(Scope *aScope);
 
     virtual void print(size_t indent);
 };
