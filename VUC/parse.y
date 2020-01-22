@@ -506,18 +506,18 @@ expr(E)
 primary_type_name(T)
 	::= INTEGER. { T = new BuiltinTypeRepr(pos(), BuiltinTypeRepr::evInteger); }
 primary_type_name(T)
-	::= IDENTIFIER(i). { T = new IdTypeRepr(pos(), i.stringValue); }
+	::= IDENTIFIER(i). { T = new GenericTypeInstRepr(pos(), i.stringValue, {}); }
 primary_type_name(T)
 	::= LBRACKET type_name(t) RBRACKET. { T = t; }
 primary_type_name(T)
 	::= primary_type_name(t) LBRACKET OF type_name_list(l) RBRACKET.
 	{
-		T = new GenericTypeInstRepr(pos(), t, l);
+		t->associateArgs(l); T = t;
 	}
 primary_type_name(T)
 	::= primary_type_name(t) DOT IDENTIFIER(i).
 	{
-		T = new DotTypeRepr(pos(), new IdTypeRepr(pos(), i.stringValue), t);
+		T = new DotTypeRepr(pos(), new GenericTypeInstRepr(pos(), i.stringValue, {}), t);
 	}
 
 %type type_name_list { std::vector<TypeRepr *> }

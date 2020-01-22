@@ -26,6 +26,12 @@ class TypeRepr : public Node
   public:
     explicit TypeRepr(Position pos) : Node(pos) {}
 
+    virtual void associateArgs(std::vector<TypeRepr *> args)
+    {
+        std::cout << "unimplemented assocArgs in " << typeid(*this).name()
+                  << "\n";
+    }
+
     virtual Type *resolveInScope(Scope *aScope);
 };
 
@@ -57,7 +63,7 @@ class BuiltinTypeRepr : public TypeRepr
     virtual void print(size_t indent);
 };
 
-class IdTypeRepr : public TypeRepr
+/*class IdTypeRepr : public TypeRepr
 {
     std::string m_id;
 
@@ -67,17 +73,22 @@ class IdTypeRepr : public TypeRepr
     virtual Type *resolveInScope(Scope *aScope);
 
     virtual void print(size_t indent);
-};
+};*/
 
 class DotTypeRepr : public TypeRepr
 {
-    IdTypeRepr *m_member;
+    TypeRepr *m_member;
     TypeRepr *m_base;
 
   public:
-    DotTypeRepr(Position _pos, IdTypeRepr *member, TypeRepr *base)
+    DotTypeRepr(Position _pos, TypeRepr *member, TypeRepr *base)
         : TypeRepr(_pos), m_member(member), m_base(base)
     {
+    }
+
+    virtual void associateArgs(std::vector<TypeRepr *> args)
+    {
+        m_member->associateArgs(args);
     }
 
     virtual void print(size_t indent);
@@ -85,15 +96,17 @@ class DotTypeRepr : public TypeRepr
 
 class GenericTypeInstRepr : public TypeRepr
 {
-    TypeRepr *m_base;
+    std::string m_base;
     std::vector<TypeRepr *> m_args;
 
   public:
-    GenericTypeInstRepr(Position pos, TypeRepr *base,
+    GenericTypeInstRepr(Position pos, std::string base,
                         std::vector<TypeRepr *> typeReprs)
         : TypeRepr(pos), m_base(base), m_args(typeReprs)
     {
     }
+
+    virtual void associateArgs(std::vector<TypeRepr *> args) { m_args = args; }
 
     virtual Type *resolveInScope(Scope *aScope);
 

@@ -46,28 +46,15 @@ void BuiltinTypeRepr::print(size_t indent)
     std::cout << "(Builtin-type: " << m_builtinKind << ")";
 }
 
-Type *IdTypeRepr::resolveInScope(Scope *aScope)
+/*Type *IdTypeRepr::resolveInScope(Scope *aScope)
 {
-    Sym *aSym = aScope->find(m_id);
-    if (!aSym)
-    {
-        std::cout << "unresolved typerepr: " << m_id << "\n";
-        return nullptr;
-    }
 
-    if (aSym->isCls())
-        return new ClassInstType(dynamic_cast<Class *>(aSym->decl()), {});
-    if (aSym->isTypeParam())
-        return new UnboundTypeArg(m_id);
-    else
-        std::cout << "unresolved idtype: " << aSym->name() << "\n";
-    return nullptr;
 }
 
 void IdTypeRepr::print(size_t indent)
 {
     std::cout << "(id-type: " << m_id << ")";
-}
+}*/
 
 void DotTypeRepr::print(size_t indent)
 {
@@ -80,7 +67,25 @@ void DotTypeRepr::print(size_t indent)
 
 Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
 {
-    Type *base = m_base->resolveInScope(aScope);
+    Type *base = nullptr;
+    Sym *aSym = aScope->find(m_base);
+
+    if (!aSym)
+    {
+        std::cout << "unresolved typerepr: " << m_base << "\n";
+        return nullptr;
+    }
+
+    if (aSym->isCls())
+        base = new ClassInstType(dynamic_cast<Class *>(aSym->decl()), {});
+    if (aSym->isTypeParam())
+        base = new UnboundTypeArg(m_base);
+    else
+    {
+        std::cout << "unresolved idtype: " << aSym->name() << "\n";
+        return nullptr;
+    }
+
     if (ClassInstType *bCls = dynamic_cast<ClassInstType *>(base))
     {
         for (short i = 0; i < m_args.size(); i++)
@@ -95,6 +100,11 @@ Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
          * that we don't leave our own type params in scope; they have their
          * own. */
 
+        /* My suggestion: We lookup the base name of each inherited one and call
+         * on them Class to construct theirs, passing the TypeReprs of the
+         * argument list.
+         */
+
         return bCls;
     }
     else
@@ -106,8 +116,7 @@ Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
 
 void GenericTypeInstRepr::print(size_t indent)
 {
-    std::cout << "(gen-inst-type:";
-    m_base->print(indent);
+    std::cout << "(gen-inst-type: " << m_base << " ";
     std::cout << "(";
     for (const auto &ty : m_args)
     {
