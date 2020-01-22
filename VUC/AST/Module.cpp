@@ -72,8 +72,7 @@ void Class::genSymTabs(Scoped *parent, Scope *superScope)
 {
     initScope(superScope);
     parent->regClass(this);
-    for (auto p : m_params)
-        m_scope->reg(new Sym(p->name(), p, Sym::evTypeParam));
+
     for (auto d : m_body->getCode())
         d->genSymTabs(this, m_scope);
     std::cout << "generated class scope for " << m_name << "\n";
@@ -81,6 +80,15 @@ void Class::genSymTabs(Scoped *parent, Scope *superScope)
 
 void Class::resolveInheritance(Scoped *superNode)
 {
-    for (auto d : m_inherits)
-        d->resolveInScope(m_scope);
+    TypeRepr *me;
+    std::vector<TypeRepr *> args;
+
+    for (auto d : m_params)
+        args.push_back(
+            new GenericTypeInstRepr({0, 0, 0, 0, 0, 0}, "Object", {}));
+
+    m_prototype = (new GenericTypeInstRepr({0, 0, 0, 0, 0, 0}, m_name, args))
+                      ->resolveInScope(m_scope);
+    // for (auto d : m_inherits)
+    //    d->resolveInScope(m_scope);
 }

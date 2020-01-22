@@ -1,3 +1,6 @@
+Public Class Object
+End Class
+
 Public Class Set Of T
     Public Function GetEntry(ByVal i As Integer) As T
         print i
@@ -16,7 +19,7 @@ Public Class Dictionary Of K, V
 End Class
 
 Public Class Main
-    Public Function Main 
+    Public Function FMain 
         Dim aDict As Dictionary(Of String, Integer)
     End Function
 End Class

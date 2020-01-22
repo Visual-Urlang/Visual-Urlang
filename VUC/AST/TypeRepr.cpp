@@ -67,6 +67,7 @@ void DotTypeRepr::print(size_t indent)
 
 Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
 {
+    Scope *tempScope = new Scope(aScope);
     Type *base = nullptr;
     Sym *aSym = aScope->find(m_base);
 
@@ -77,8 +78,12 @@ Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
     }
 
     if (aSym->isCls())
+    {
+
         base = new ClassInstType(dynamic_cast<Class *>(aSym->decl()), {});
-    if (aSym->isTypeParam())
+        std::cout << "is a cls: " << aSym->name() << ";\n";
+    }
+    else if (aSym->isTypeParam())
         base = new UnboundTypeArg(m_base);
     else
     {
@@ -86,30 +91,39 @@ Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
         return nullptr;
     }
 
-    if (ClassInstType *bCls = dynamic_cast<ClassInstType *>(base))
+    if (m_args.size())
     {
-        for (short i = 0; i < m_args.size(); i++)
+        if (ClassInstType *bCls = dynamic_cast<ClassInstType *>(base))
         {
-            auto p = m_args[i];
-            auto arg = TypeParamBinding(bCls->cls()->paramAt(i)->name(),
-                                        p->resolveInScope(aScope));
-            bCls->addArg(arg);
+            for (auto p : bCls->cls()->params())
+                tempScope->reg(new Sym(p->name(), p, Sym::evTypeParam));
+
+            for (short i = 0; i < m_args.size(); i++)
+            {
+                auto p = m_args[i];
+                auto arg = TypeParamBinding(bCls->cls()->paramAt(i)->name(),
+                                            p->resolveInScope(tempScope));
+                bCls->addArg(arg);
+            }
+
+            /* Next step is to set up the supers. Of course we have to make sure
+             * that we don't leave our own type params in scope; they have their
+             * own. */
+
+            /* My suggestion: We lookup the base name of each inherited one and
+             * call on them Class to construct theirs, passing the TypeReprs of
+             * the argument list.
+             */
+
+            for (auto inh : bCls->cls()->inherits())
+                inh->repr()->resolveInScope(tempScope);
+
+            return bCls;
         }
-
-        /* Next step is to set up the supers. Of course we have to make sure
-         * that we don't leave our own type params in scope; they have their
-         * own. */
-
-        /* My suggestion: We lookup the base name of each inherited one and call
-         * on them Class to construct theirs, passing the TypeReprs of the
-         * argument list.
-         */
-
-        return bCls;
-    }
-    else
-    {
-        std::cout << "error: Base is not a class.";
+        else
+        {
+            std::cout << "Base is not a class.";
+        }
     }
     return nullptr;
 }
