@@ -66,6 +66,8 @@ class Class : public Module
     {
     }
 
+    TypeParamDecl *paramAt(short i) { return m_params[i]; }
+
     virtual void print(size_t indent);
     virtual void genSymTabs(Scoped *superNode, Scope *superScope) override;
     virtual void resolveInheritance(Scoped *superNode);

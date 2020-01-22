@@ -31,17 +31,38 @@ class BuiltinType : public Type
 {
 };
 
+class UnboundTypeArg : public Type
+{
+  public:
+    std::string name;
+
+    explicit UnboundTypeArg(std::string name) : name(name) {}
+};
+
+struct TypeParamBinding
+{
+    std::string name;
+    Type *type;
+
+    TypeParamBinding(std::string name, Type *type) : name(name), type(type) {}
+};
+
 /* Instantiated type*/
 class ClassInstType : public Type
 {
+    std::vector<ClassInstType> m_supers;
     Class *m_class;
-    std::vector<Type *> m_params;
+    /* Table of names to their concrete type replacements. Used to substitute
+     * type parameter uses by Dims and methods of the class.*/
+    std::vector<TypeParamBinding> m_params;
 
   public:
-    ClassInstType(Class *class_, std::vector<Type *> params)
+    ClassInstType(Class *class_, std::vector<TypeParamBinding> params)
         : m_class(class_), m_params(params)
     {
     }
 
-    void addArg(Type *anArg) { m_params.push_back(anArg); }
+    Class *cls() { return m_class; }
+
+    void addArg(TypeParamBinding anArg) { m_params.push_back(anArg); }
 };

@@ -56,11 +56,11 @@ Type *IdTypeRepr::resolveInScope(Scope *aScope)
     }
 
     if (aSym->isCls())
-    {
         return new ClassInstType(dynamic_cast<Class *>(aSym->decl()), {});
-    }
+    if (aSym->isTypeParam())
+        return new UnboundTypeArg(m_id);
     else
-        std::cout << "sym: " << aSym->name() << "\n";
+        std::cout << "unresolved idtype: " << aSym->name() << "\n";
     return nullptr;
 }
 
@@ -83,8 +83,18 @@ Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
     Type *base = m_base->resolveInScope(aScope);
     if (ClassInstType *bCls = dynamic_cast<ClassInstType *>(base))
     {
-        for (auto p : m_args)
-            bCls->addArg(p->resolveInScope(aScope));
+        for (short i = 0; i < m_args.size(); i++)
+        {
+            auto p = m_args[i];
+            auto arg = TypeParamBinding(bCls->cls()->paramAt(i)->name(),
+                                        p->resolveInScope(aScope));
+            bCls->addArg(arg);
+        }
+
+        /* Next step is to set up the supers. Of course we have to make sure
+         * that we don't leave our own type params in scope; they have their
+         * own. */
+
         return bCls;
     }
     else
