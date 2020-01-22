@@ -2,6 +2,7 @@ Public Class Object
 End Class
 
 Public Class Set Of T
+    Inherits Object
     Public Function GetEntry(ByVal i As Integer) As T
         print i
     End Function

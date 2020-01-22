@@ -89,6 +89,8 @@ void Class::resolveInheritance(Scoped *superNode)
 
     m_prototype = (new GenericTypeInstRepr({0, 0, 0, 0, 0, 0}, m_name, args))
                       ->resolveInScope(m_scope);
+    m_prototype->print();
+    std::cout << "\n\n";
     // for (auto d : m_inherits)
     //    d->resolveInScope(m_scope);
 }

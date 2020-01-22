@@ -22,6 +22,7 @@ class Class;
 
 class Type
 {
+  public:
     virtual void print() { std::cout << "unknown type"; }
 };
 
@@ -34,9 +35,11 @@ class BuiltinType : public Type
 class UnboundTypeArg : public Type
 {
   public:
-    std::string name;
+    std::string m_name;
 
-    explicit UnboundTypeArg(std::string name) : name(name) {}
+    explicit UnboundTypeArg(std::string name) : m_name(name) {}
+
+    virtual void print();
 };
 
 struct TypeParamBinding
@@ -50,7 +53,7 @@ struct TypeParamBinding
 /* Instantiated type*/
 class ClassInstType : public Type
 {
-    std::vector<ClassInstType> m_supers;
+    std::vector<Type *> m_inherits;
     Class *m_class;
     /* Table of names to their concrete type replacements. Used to substitute
      * type parameter uses by Dims and methods of the class.*/
@@ -65,4 +68,7 @@ class ClassInstType : public Type
     Class *cls() { return m_class; }
 
     void addArg(TypeParamBinding anArg) { m_params.push_back(anArg); }
+    void addInherited(Type *inh) { m_inherits.push_back(inh); }
+
+    virtual void print();
 };

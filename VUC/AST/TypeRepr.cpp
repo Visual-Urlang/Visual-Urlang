@@ -116,16 +116,16 @@ Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
              */
 
             for (auto inh : bCls->cls()->inherits())
-                inh->repr()->resolveInScope(tempScope);
+                bCls->addInherited(inh->repr()->resolveInScope(tempScope));
 
             return bCls;
         }
         else
         {
-            std::cout << "Base is not a class.";
+            std::cout << "Base is not a class, cannot specialize.";
         }
     }
-    return nullptr;
+    return base;
 }
 
 void GenericTypeInstRepr::print(size_t indent)
