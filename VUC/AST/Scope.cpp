@@ -54,3 +54,14 @@ Sym *Scope::find(std::string name)
             return sym;
     return m_super ? m_super->find(name) : nullptr;
 }
+
+Type *Scope::findType(std::string type)
+{
+    for (auto sym : m_syms)
+        if (sym->name() == type)
+        {
+            if (sym->isType())
+                return sym->type();
+        }
+    return m_super ? m_super->findType(type) : nullptr;
+}

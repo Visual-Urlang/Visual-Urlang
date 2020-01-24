@@ -47,9 +47,6 @@ Type *ClassInstType::copyWithSubs(std::vector<TypeParamBinding> subs)
     std::vector<Type *> newInherits = m_inherits;
     std::vector<TypeParamBinding> changes = m_params;
 
-    for (auto s : subs)
-        changes.push_back(s);
-
     for (int i = 0; i < changes.size(); i++)
         changes[i].type = changes[i].type->copyWithSubs(subs);
     for (auto &i : newInherits)

@@ -32,6 +32,7 @@ class TypeLoc
     TypeRepr *repr() { return m_repr; }
 
     void resolveInScope(Scope *aScope);
+    void typeCheck(Scope *aScope);
 
     void print(size_t indent);
 };

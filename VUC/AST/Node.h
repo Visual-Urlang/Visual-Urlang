@@ -46,9 +46,10 @@ class Node
         std::cout << "unresolved resolveInheritance in " << typeid(*this).name()
                   << "\n";
     }
-    virtual void typeCheck(Scoped *superNode)
+    virtual Node *typeCheck(Scoped *superNode)
     {
         std::cout << "unresolved typeCheck in " << typeid(*this).name() << "\n";
+        return this;
     }
 };
 

@@ -51,3 +51,11 @@ class ExprStmt : public Stmt
   public:
     ExprStmt(Position pos, Expr *expr) : Stmt(pos), m_expr(expr) {}
 };
+
+class ReturnStmt : public Stmt
+{
+    Expr *m_expr;
+
+  public:
+    ReturnStmt(Position pos, Expr *expr) : Stmt(pos), m_expr(expr) {}
+};

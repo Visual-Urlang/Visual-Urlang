@@ -12,6 +12,7 @@
 %option reentrant
 %option extra-type = "VU_Parser *"
 %option prefix = "vuc"
+%option caseless
 
 %{
 
@@ -54,6 +55,7 @@ COMMENT \"(\\.|[^"])*\"
 "Inherits"      { prs(INHERITS); }
 "Of"            { prs(OF); }
 "Public"        { prs(PUBLIC); }
+"Return"        { prs(RETURN); }
 
 "Integer"       { prs(INTEGER); }
 

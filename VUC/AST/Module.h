@@ -75,4 +75,5 @@ class Class : public Module
     virtual void print(size_t indent);
     virtual void genSymTabs(Scoped *superNode, Scope *superScope) override;
     virtual void resolveInheritance(Scoped *superNode);
+    virtual Node *typeCheck(Scoped *superNode);
 };

@@ -23,21 +23,24 @@ the file "EULA.md", which should have been included with this file.
 
 class Decl;
 class TypeParamDecl;
-class TypeParamBinding;
+struct TypeParamBinding;
 class Class;
 
 class Type
 {
   public:
-    virtual void print(size_t in) { std::cout << blanks(in) << "unknown type"; }
-
-    /* is this the right way? */
     virtual Type *copyWithSubs(std::vector<TypeParamBinding> subs)
     {
         std::cout << "unimplemented copyWithSubs() in " << typeid(*this).name()
                   << "\n";
-        return nullptr;
+        return this;
     }
+
+    virtual void print(size_t in) { std::cout << blanks(in) << "unknown type"; }
+};
+
+class TypeError : Type
+{
 };
 
 /* A basic type such as Integer, Short, etc.
@@ -67,6 +70,13 @@ class UnboundTypeArg : public Type
     virtual Type *copyWithSubs(std::vector<TypeParamBinding> subs);
 
     virtual void print(size_t in);
+};
+
+class UnboundTypeArgDot : public Type
+{
+    UnboundTypeArg *m_base;
+
+  public:
 };
 
 struct TypeParamBinding

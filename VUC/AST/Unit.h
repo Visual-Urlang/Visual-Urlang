@@ -38,14 +38,16 @@ class Unit : public Decl, public Scoped
         : Decl(Position(0, 0, 0, 0, 0, 0)), m_name(name), m_body(body)
     {
     }
-
-    virtual void print(size_t indent);
+    void regClass(Class *decl) override;
 
     /* analysis */
     /* stage 1 */
     void genSymTabs();
     /* stage 2 */
-    virtual void resolveInheritance(Scoped *superNode);
+    virtual void resolveInheritance(Scoped *superNode) override;
+    /* stage 3: actual typechecking */
+    virtual Node *typeCheck(Scoped *superNode) override;
 
-    void regClass(Class *decl) override;
+    /* utility */
+    virtual void print(size_t indent);
 };

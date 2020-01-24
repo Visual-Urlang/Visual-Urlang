@@ -3,24 +3,25 @@ End Class
 
 Public Class Set Of T
     Inherits Object
-    Public Function GetEntry(ByVal i As Integer) As T
+    Public Function Get(ByVal i As Integer) As T
         print i
     End Function
 End Class
 
-Public Class Association Of K, V
+Public Class Association Of TA, TB
 End Class
 
-Public Class Dictionary Of K, V
-    Inherits Set(Of Association(Of K, V))
+Public Class Dictionary Of TKey, TValue
+    Inherits Set(Of Association(Of TKey, TValue))
 
-    Public Function test As K (Of Y)
-        print i
+    Public Function SetKey(ByVal key As TKey, ByVal value As TValue) As TValue
+        Return key
     End Function
 End Class
 
 Public Class Main
     Public Function FMain 
         Dim aDict As Dictionary(Of String, Integer)
+
     End Function
 End Class

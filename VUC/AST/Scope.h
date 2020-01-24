@@ -32,6 +32,7 @@ class Sym
         evLocal,
         evArg,
         evTypeParam,
+        evType,
     };
 
   protected:
@@ -47,6 +48,7 @@ class Sym
 
     std::string name() const { return m_name; }
     Decl *decl() { return m_decl; }
+    Type *type() { return m_decl->type(); }
 
     /* is a class */
     bool isCls() { return m_kind == evCls; }
@@ -63,6 +65,8 @@ class Sym
     bool isArg() { return m_kind == evArg; }
     /* type parameter to class */
     bool isTypeParam() { return m_kind == evTypeParam; }
+    /* type entry */
+    bool isType() { return m_kind == evType; }
 };
 
 class Scope
@@ -80,4 +84,5 @@ class Scope
     void addSubScope(Scope *sub);
     void reg(Sym *sym);
     Sym *find(std::string name);
+    Type *findType(std::string type);
 };

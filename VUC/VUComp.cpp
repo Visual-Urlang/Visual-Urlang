@@ -71,6 +71,7 @@ void parseFile(bool trace, std::string fName)
 
     parser->mod()->genSymTabs();
     parser->mod()->resolveInheritance(NULL);
+    parser->mod()->typeCheck(nullptr);
     parser->mod()->print(0);
 }
 

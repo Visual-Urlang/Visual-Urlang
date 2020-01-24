@@ -29,6 +29,8 @@ class Decl : public Node
   public:
     explicit Decl(Position pos) : Node(pos) {}
 
+    virtual Type *type() { return nullptr; }
+
     /* 2nd step analysis */
     virtual void resolveDeclTypes()
     {
@@ -51,7 +53,13 @@ class NamedDecl : public Decl
 class TypeParamDecl : public NamedDecl
 {
   public:
+    Type *m_type = nullptr;
+
     TypeParamDecl(Position pos, std::string name) : NamedDecl(pos, name) {}
+
+    virtual Type *type() { return m_type; }
+
+    void synthType(Scoped *ctx);
 };
 
 /* a variable declaration */
@@ -69,6 +77,7 @@ class DimDecl : public NamedDecl
     virtual void print(size_t indent);
 
     virtual void genSymTabs(Scoped *superNode, Scope *superScope) override;
+    virtual DimDecl *typeCheck(Scoped *superNode) override;
 };
 
 class ParamDecl : public DimDecl
@@ -98,6 +107,8 @@ class FunDecl : public NamedDecl, public Scoped
 
     void genSymTabs(Scoped *superNode, Scope *superScope) override;
     virtual void regDim(DimDecl *decl) override;
+
+    virtual FunDecl *typeCheck(Scoped *superNode) override;
 
     virtual void print(size_t indent) override;
 };

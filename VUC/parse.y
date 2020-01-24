@@ -181,7 +181,7 @@ cls_stmt(C)
 
 func_stmt(F)
 	::= opt_visibility_spec FUNCTION IDENTIFIER(n) 
-		opt_param_list(p) opt_as_clause(t) EOL block_stmt_list(l) EOL END FUNCTION.
+		opt_param_list(p) opt_as_clause(t) EOL block_stmt_list(l) eols END FUNCTION.
 		{
 			F = new FunDecl(pos(), n.stringValue, p, new TypeLoc(t), l);
 		}
@@ -212,12 +212,13 @@ block_stmt(B)
 	{
 		B = new FunCallExpr(pos(), c, l);
 	}
+block_stmt(B) ::= RETURN expr(e). { B = new ReturnStmt(pos(), e); }
 
 %type opt_param_list { std::vector<ParamDecl*> }
 %type param_list { std::vector<ParamDecl *> }
 
-opt_param_list
-	::= LBRACKET param_list RBRACKET.
+opt_param_list(L)
+	::= LBRACKET param_list(l) RBRACKET. { L = l; }
 opt_param_list
 	::= .
 
@@ -228,7 +229,7 @@ param_list(P)
 		P = std::vector<ParamDecl *>({decl}); 
 	}
 param_list(P)
-	::= param_list(l) pass_style variable_decl_part(p).
+	::= param_list(l) COMMA pass_style variable_decl_part(p).
 	{
 		auto decl = new ParamDecl(pos(), std::get<0>(p).stringValue, TypeLoc(std::get<1>(p)));
 		(P = l).push_back({decl}); 

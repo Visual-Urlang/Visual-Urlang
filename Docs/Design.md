@@ -1,5 +1,19 @@
 ## Design Decisions Diary
 
+#### 23/01/2020
+For type inference: perhaps require that we use an `auto` keyword if necessary.
+So we could do: `Dim X = Dictionary.new` or indeed
+`Dim X As Auto = Dictionary.new`.
+
+Or `Dim X As New Dictionary<Auto, Auto>`
+
+But what about the fact that object type should be set during construction?
+
+And then - Another issue - what about dot types? I think they could all be
+resolved at the time of TypeRepr creation, but what if not? Some kind of
+delayed mechanism for it - an UnresolvedTypeMember type perhaps, that
+returns a real type after the fact.
+
 #### 22/01/2020
 A different way of conceptualising types:
 

@@ -33,6 +33,8 @@ class Scoped
 
     void initScope(Scope *parent = nullptr);
 
+    Scope *scope() { return m_scope; }
+
     /* register a funarg */
     virtual void regArg(ParamDecl *param);
     virtual void regClass(Class *decl);

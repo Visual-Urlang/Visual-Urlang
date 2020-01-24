@@ -23,15 +23,30 @@ the file "EULA.md", which should have been included with this file.
 
 void TypeLoc::resolveInScope(Scope *aScope)
 {
+    /* unused? */
     m_type = m_repr->resolveInScope(aScope);
 }
 
+void TypeLoc::typeCheck(Scope *aScope) { m_type = m_repr->realise(aScope); }
+
 void TypeLoc::print(size_t indent)
 {
+    std::cout << blanks(indent) << "(TypeLoc\n";
     if (m_repr)
-        m_repr->print(indent);
+    {
+        std::cout << blanks(indent) << "(REPR: ";
+        m_repr->print(indent + 2);
+        std::cout << blanks(indent) << ")\n";
+    }
     else
         std::cout << "<empty-typeloc>";
+    if (m_type)
+    {
+        std::cout << blanks(indent);
+        m_type->print(indent + 2);
+        std::cout << "\n";
+    }
+    std::cout << blanks(indent) << ")";
 }
 
 Type *TypeRepr::resolveInScope(Scope *aScope)
@@ -106,13 +121,13 @@ Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
                 bCls->addArg(arg);
             }
 
-            /* Next step is to set up the supers. Of course we have to make sure
-             * that we don't leave our own type params in scope; they have their
-             * own. */
+            /* Next step is to set up the supers. Of course we have to make
+             * sure that we don't leave our own type params in scope; they
+             * have their own. */
 
-            /* My suggestion: We lookup the base name of each inherited one and
-             * call on them Class to construct theirs, passing the TypeReprs of
-             * the argument list.
+            /* My suggestion: We lookup the base name of each inherited one
+             * and call on them Class to construct theirs, passing the
+             * TypeReprs of the argument list.
              */
 
             for (auto inh : bCls->cls()->inherits())
@@ -122,11 +137,29 @@ Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
         }
         else
         {
-            /* NOTE! Have to allow for unbound type args to be specialised. */
+            /* NOTE! Have to allow for unbound type args to be specialised.
+             */
             std::cout << "Base is not a class, cannot specialize.";
         }
     }
     return base;
+}
+
+Type *GenericTypeInstRepr::realise(Scope *aScope)
+{
+    Type *base = aScope->findType(m_base);
+    std::vector<Type *> args;
+
+    std::cout << "\n\n\n\nREALISING\n\n\n\n";
+
+    for (auto a : m_args)
+        args.push_back(a->realise(aScope));
+
+    if (auto ci = dynamic_cast<ClassInstType *>(base))
+        return ci->invoke(args);
+
+    std::cout << "failure in realisation of generic\n";
+    return nullptr;
 }
 
 void GenericTypeInstRepr::print(size_t indent)

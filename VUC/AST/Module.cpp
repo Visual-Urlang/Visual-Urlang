@@ -46,6 +46,13 @@ void Unit::resolveInheritance(Scoped *superNode)
         d->resolveInheritance(this);
 }
 
+Node *Unit::typeCheck(Scoped *superNode)
+{
+    for (auto d : m_body->getCode())
+        d->typeCheck(this);
+    return this;
+}
+
 void Unit::regClass(Class *decl)
 {
     Sym *sym = new Sym(decl->name(), decl, Sym::Kind::evCls);
@@ -80,7 +87,6 @@ void Class::genSymTabs(Scoped *parent, Scope *superScope)
 
 void Class::resolveInheritance(Scoped *superNode)
 {
-    TypeRepr *me;
     std::vector<TypeRepr *> args;
 
     for (auto d : m_params)
@@ -102,4 +108,34 @@ void Class::resolveInheritance(Scoped *superNode)
     }
     // for (auto d : m_inherits)
     //    d->resolveInScope(m_scope);
+}
+
+Node *Class::typeCheck(Scoped *superNode)
+{
+    ClassInstType *objClass = new ClassInstType(
+        dynamic_cast<Class *>(m_scope->find("Object")->decl()), {});
+    Type *selfType;
+    std::vector<Type *> selfTypeArgs;
+
+    std::cout << "\n\n\nTypechecking Class\n\n\n";
+
+    for (auto f : m_params)
+    {
+        selfTypeArgs.push_back(objClass);
+        m_scope->reg(new Sym(f->name(), f, Sym::evType));
+        f->m_type = objClass;
+    }
+
+    selfType = m_prototype->invoke(selfTypeArgs);
+    m_scope->reg(new Sym("InstanceType", this, Sym::evType));
+
+    for (auto &n : m_body->getCode())
+    {
+        std::cout << "(\n\nTYPECHECKING A" << typeid(*n).name() << ")\n\n";
+        n = n->typeCheck(this);
+    }
+
+    // selfType->print(0);
+
+    return this;
 }

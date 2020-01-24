@@ -33,6 +33,13 @@ class TypeRepr : public Node
     }
 
     virtual Type *resolveInScope(Scope *aScope);
+
+    virtual Type *realise(Scope *superNode)
+    {
+        std::cout << "\n\n\n\nunimplemented realise in " << typeid(*this).name()
+                  << "\n\n\n\n";
+        return nullptr;
+    }
 };
 
 /* A builtin type. */
@@ -109,6 +116,8 @@ class GenericTypeInstRepr : public TypeRepr
     virtual void associateArgs(std::vector<TypeRepr *> args) { m_args = args; }
 
     virtual Type *resolveInScope(Scope *aScope);
+
+    virtual Type *realise(Scope *superNode);
 
     virtual void print(size_t indent);
 };

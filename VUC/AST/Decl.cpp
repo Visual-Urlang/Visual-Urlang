@@ -20,16 +20,25 @@ the file "EULA.md", which should have been included with this file.
 #include "AST/Stmt.h"
 #include "Scope.h"
 
+void TypeParamDecl::synthType(Scoped *ctx) {}
+
 void DimDecl::print(size_t indent)
 {
-    std::cout << blanks(indent) << "[DimDecl: " << m_name << " type: "
-              << "blanktype"
-              << "]";
+    std::cout << blanks(indent) << "[DimDecl: " << m_name << " type:\n";
+    m_typeLoc.print(indent);
+    std::cout << "]";
 }
 
 void DimDecl::genSymTabs(Scoped *superNode, Scope *superScope)
 {
     superNode->regDim(this);
+}
+
+DimDecl *DimDecl::typeCheck(Scoped *superNode)
+{
+    std::cout << "\n\n\nDIMDECL TYPECHECK\n\n\n";
+    m_typeLoc.typeCheck(superNode->scope());
+    return this;
 }
 
 void ParamDecl::genSymTabs(Scoped *superNode, Scope *superScope)
@@ -40,6 +49,16 @@ void ParamDecl::genSymTabs(Scoped *superNode, Scope *superScope)
 void FunDecl::regDim(DimDecl *decl)
 {
     m_scope->reg(new Sym(decl->name(), decl, Sym::Kind::evLocal));
+}
+
+FunDecl *FunDecl::typeCheck(Scoped *superNode)
+{
+    for (auto p : m_formals)
+    {
+        m_scope->reg(new Sym(p->name(), p, Sym::evType));
+        p->typeCheck(this); /* consider initialisers*/
+    }
+    return this;
 }
 
 void FunDecl::genSymTabs(Scoped *superNode, Scope *superScope)
@@ -56,7 +75,12 @@ void FunDecl::print(size_t indent)
 {
     std::cout << blanks(indent) << "[FunDecl: " << m_name << " rtype: ";
     m_rType->print(indent);
-    std::cout << "\n";
+    std::cout << "\n" << blanks(indent) << "args:\n";
+    for (const auto f : m_formals)
+    {
+        f->print(indent);
+        std::cout << "\n";
+    }
     m_code->print(indent + 2);
     std::cout << "\n" << blanks(indent) << "]";
 }
