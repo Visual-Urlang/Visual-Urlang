@@ -19,35 +19,87 @@ the file "EULA.md", which should have been included with this file.
 #include "Module.h"
 #include "Type.h"
 
-void UnboundTypeArg::print()
+Type *BuiltinType::copyWithSubs(std::vector<TypeParamBinding> subs)
 {
-    std::cout << "(unbound-type-arg: " << m_name << ")";
+    return this;
 }
 
-void ClassInstType::print()
+Type *UnboundTypeArg::copyWithSubs(std::vector<TypeParamBinding> subs)
 {
-    std::cout << "(class-inst: " << m_class->name();
+    for (auto t : subs)
+    {
+        printf("[[%s]]\n", t.name.c_str());
+        if (t.name == m_name)
+            return t.type;
+    }
+    std::cout << "could not resolve myself " << m_name << "\n";
+    return nullptr;
+}
+
+void UnboundTypeArg::print(size_t in)
+{
+    std::cout << blanks(in) << "(unbound-type-arg: " << m_name << ")";
+}
+
+Type *ClassInstType::copyWithSubs(std::vector<TypeParamBinding> subs)
+{
+    ClassInstType *newTy;
+    std::vector<Type *> newInherits = m_inherits;
+    std::vector<TypeParamBinding> changes = m_params;
+
+    for (auto s : subs)
+        changes.push_back(s);
+
+    for (int i = 0; i < changes.size(); i++)
+        changes[i].type = changes[i].type->copyWithSubs(subs);
+    for (auto &i : newInherits)
+        i = i->copyWithSubs(subs);
+
+    newTy = new ClassInstType(m_class, changes);
+    newTy->m_inherits = newInherits;
+    return newTy;
+}
+
+Type *ClassInstType::invoke(std::vector<Type *> subs)
+{
+    ClassInstType *newTy;
+    std::vector<Type *> newInherits = m_inherits;
+    std::vector<TypeParamBinding> changes = m_params;
+
+    for (int i = 0; i < changes.size(); i++)
+        changes[i].type = subs[i];
+    for (auto &i : newInherits)
+        i = i->copyWithSubs(changes);
+
+    newTy = new ClassInstType(m_class, changes);
+    newTy->m_inherits = newInherits;
+    return newTy;
+}
+
+void ClassInstType::print(size_t in)
+{
+    std::cout << blanks(in) << "(class-inst: " << m_class->name() << "\n";
 
     if (!m_params.empty())
     {
-        std::cout << "\n\tbindings: \n";
+        std::cout << blanks(in) << "bindings: \n";
         for (auto p : m_params)
         {
-            std::cout << "\tnam: " << p.name << ", type: ";
-            p.type->print();
+            std::cout << blanks(in) << "nam: " << p.name << ", type: \n";
+            p.type->print(in + 2);
             std::cout << "\n";
         }
     }
 
     if (!m_inherits.empty())
     {
-        std::cout << "\n\tinherits: (";
+        std::cout << blanks(in) << "inherits: (";
         for (auto p : m_inherits)
         {
-            p->print();
+            p->print(in + 2);
             std::cout << "\n";
         }
-        std::cout << ")";
+        std::cout << blanks(in) << ")\n";
     }
-    std::cout << ")\n";
+    std::cout << blanks(in) << ")\n";
 }

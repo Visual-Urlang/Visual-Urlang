@@ -18,6 +18,7 @@ the file "EULA.md", which should have been included with this file.
 
 #include <iostream>
 
+#include "AST.h"
 #include "Position.h"
 #include "Scoped.h"
 
@@ -45,8 +46,10 @@ class Node
         std::cout << "unresolved resolveInheritance in " << typeid(*this).name()
                   << "\n";
     }
+    virtual void typeCheck(Scoped *superNode)
+    {
+        std::cout << "unresolved typeCheck in " << typeid(*this).name() << "\n";
+    }
 };
 
 inline Position Node::pos() const { return m_pos; }
-
-inline std::string blanks(size_t n) { return std::string(n, ' '); }

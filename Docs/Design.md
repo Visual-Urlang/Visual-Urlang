@@ -1,5 +1,18 @@
 ## Design Decisions Diary
 
+#### 22/01/2020
+A different way of conceptualising types:
+
+ - TypeRepr only occurs where one expects to find a potential type in the source.
+    It is NOT used for superclass listings.
+ - Every class builds its own Prototype type.
+ - A TypeRepr resolves its prototype and applies the substitutions to the
+   prototype.
+ - All as-yet-unresolved types (i.e. dependent on a type variable) are
+   UnresolvedTypeVars.
+ - When a TypeRepr is asked to be resolved, it gets it prototype, then it
+   calls on the UnresolvedTypeVars to replace themself...
+
 #### 21/01/2020 2
 Generics are difficult. Here is my current idea. For these two classes:
 

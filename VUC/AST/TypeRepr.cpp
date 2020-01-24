@@ -79,30 +79,30 @@ Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
 
     if (aSym->isCls())
     {
-
         base = new ClassInstType(dynamic_cast<Class *>(aSym->decl()), {});
         std::cout << "is a cls: " << aSym->name() << ";\n";
     }
     else if (aSym->isTypeParam())
-        base = new UnboundTypeArg(m_base);
+        base = new UnboundTypeArg(m_base, aSym->decl());
     else
     {
-        std::cout << "unresolved idtype: " << aSym->name() << "\n";
+        std::cout << "unresolved id type: " << aSym->name() << "\n";
         return nullptr;
     }
 
-    if (m_args.size())
+    if (!m_args.empty())
     {
-        if (ClassInstType *bCls = dynamic_cast<ClassInstType *>(base))
+        if (auto *bCls = dynamic_cast<ClassInstType *>(base))
         {
             for (auto p : bCls->cls()->params())
                 tempScope->reg(new Sym(p->name(), p, Sym::evTypeParam));
 
-            for (short i = 0; i < m_args.size(); i++)
+            for (size_t i = 0; i < m_args.size(); i++)
             {
                 auto p = m_args[i];
                 auto arg = TypeParamBinding(bCls->cls()->paramAt(i)->name(),
-                                            p->resolveInScope(tempScope));
+                                            p->resolveInScope(tempScope),
+                                            bCls->cls()->paramAt(i));
                 bCls->addArg(arg);
             }
 
@@ -122,6 +122,7 @@ Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
         }
         else
         {
+            /* NOTE! Have to allow for unbound type args to be specialised. */
             std::cout << "Base is not a class, cannot specialize.";
         }
     }

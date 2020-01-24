@@ -50,7 +50,7 @@ class Module : public Decl, public Scoped
 
 class Class : public Module
 {
-    Type *m_prototype;
+    ClassInstType *m_prototype;
     /* Superclasses */
     std::vector<TypeLoc *> m_inherits;
     /* Interfaces implemented */

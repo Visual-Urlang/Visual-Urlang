@@ -84,13 +84,22 @@ void Class::resolveInheritance(Scoped *superNode)
     std::vector<TypeRepr *> args;
 
     for (auto d : m_params)
-        args.push_back(
-            new GenericTypeInstRepr({0, 0, 0, 0, 0, 0}, "Object", {}));
+        args.push_back(new GenericTypeInstRepr(m_pos, d->name(), {}));
 
-    m_prototype = (new GenericTypeInstRepr({0, 0, 0, 0, 0, 0}, m_name, args))
-                      ->resolveInScope(m_scope);
-    m_prototype->print();
+    m_prototype = dynamic_cast<ClassInstType *>(
+        (new GenericTypeInstRepr(m_pos, m_name, args))
+            ->resolveInScope(m_scope));
+    m_prototype->print(0);
     std::cout << "\n\n";
+
+    /* test case */
+    if (m_name == "Dictionary")
+    {
+        std::vector<Type *> tys;
+        tys.push_back(new BuiltinType);
+        tys.push_back(new BuiltinType);
+        m_prototype->invoke(tys)->print(0);
+    }
     // for (auto d : m_inherits)
     //    d->resolveInScope(m_scope);
 }
