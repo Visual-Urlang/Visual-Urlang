@@ -36,7 +36,6 @@ void DimDecl::genSymTabs(Scoped *superNode, Scope *superScope)
 
 DimDecl *DimDecl::typeCheck(Scoped *superNode)
 {
-    std::cout << "\n\n\nDIMDECL TYPECHECK\n\n\n";
     m_typeLoc.typeCheck(superNode->scope());
     return this;
 }
@@ -53,11 +52,19 @@ void FunDecl::regDim(DimDecl *decl)
 
 FunDecl *FunDecl::typeCheck(Scoped *superNode)
 {
+    m_rType->typeCheck(m_scope);
+
+    m_scope->reg(new InternalTypeSym("$ReturnType", this, m_rType->type()));
+
     for (auto p : m_formals)
     {
-        m_scope->reg(new Sym(p->name(), p, Sym::evType));
+        /* NO! We get their type by asking the decl.
+         * m_scope->reg(new Sym(p->name(), p, Sym::evType)); */
         p->typeCheck(this); /* consider initialisers*/
     }
+
+    for (auto &n : m_code->getCode())
+        n = n->typeCheck(this);
     return this;
 }
 

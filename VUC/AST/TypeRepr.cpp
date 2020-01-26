@@ -27,7 +27,10 @@ void TypeLoc::resolveInScope(Scope *aScope)
     m_type = m_repr->resolveInScope(aScope);
 }
 
-void TypeLoc::typeCheck(Scope *aScope) { m_type = m_repr->realise(aScope); }
+void TypeLoc::typeCheck(Scope *aScope)
+{
+    m_type = m_repr ? m_repr->realise(aScope) : new BuiltinType();
+}
 
 void TypeLoc::print(size_t indent)
 {
@@ -55,6 +58,8 @@ Type *TypeRepr::resolveInScope(Scope *aScope)
               << typeid(*this).name() << "\n";
     return nullptr;
 }
+
+Type *BuiltinTypeRepr::realise(Scope *superNode) { return new BuiltinType; }
 
 void BuiltinTypeRepr::print(size_t indent)
 {
@@ -95,7 +100,6 @@ Type *GenericTypeInstRepr::resolveInScope(Scope *aScope)
     if (aSym->isCls())
     {
         base = new ClassInstType(dynamic_cast<Class *>(aSym->decl()), {});
-        std::cout << "is a cls: " << aSym->name() << ";\n";
     }
     else if (aSym->isTypeParam())
         base = new UnboundTypeArg(m_base, aSym->decl());
@@ -149,8 +153,6 @@ Type *GenericTypeInstRepr::realise(Scope *aScope)
 {
     Type *base = aScope->findType(m_base);
     std::vector<Type *> args;
-
-    std::cout << "\n\n\n\nREALISING\n\n\n\n";
 
     for (auto a : m_args)
         args.push_back(a->realise(aScope));

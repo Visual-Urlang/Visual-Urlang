@@ -20,6 +20,8 @@ the file "EULA.md", which should have been included with this file.
 #include <vector>
 
 class Decl;
+class Class;
+class Type;
 
 class Sym
 {
@@ -47,8 +49,9 @@ class Sym
     }
 
     std::string name() const { return m_name; }
+    Class *cls();
     Decl *decl() { return m_decl; }
-    Type *type() { return m_decl->type(); }
+    virtual Type *type();
 
     /* is a class */
     bool isCls() { return m_kind == evCls; }
@@ -67,6 +70,19 @@ class Sym
     bool isTypeParam() { return m_kind == evTypeParam; }
     /* type entry */
     bool isType() { return m_kind == evType; }
+};
+
+class InternalTypeSym : public Sym
+{
+    Type *m_type;
+
+  public:
+    InternalTypeSym(std::string name, Decl *decl, Type *type)
+        : Sym(name, decl, evType), m_type(type)
+    {
+    }
+
+    Type *type() override { return m_type; }
 };
 
 class Scope

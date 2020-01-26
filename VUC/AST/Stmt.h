@@ -58,4 +58,6 @@ class ReturnStmt : public Stmt
 
   public:
     ReturnStmt(Position pos, Expr *expr) : Stmt(pos), m_expr(expr) {}
+
+    virtual ReturnStmt *typeCheck(Scoped *superNode) override;
 };

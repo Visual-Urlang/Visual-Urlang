@@ -21,6 +21,23 @@ the file "EULA.md", which should have been included with this file.
 
 #include "AST.h"
 
+enum BuiltinKind
+{
+    evVoid,
+    evByte,
+    evBoolean,
+    evInteger,
+    evLong,
+    evLongLong,
+    evWord,
+    evSingle,
+    evDouble,
+    evCharacter,
+    evDate,
+    evObject,
+    evVariant,
+};
+
 class Decl;
 class TypeParamDecl;
 struct TypeParamBinding;
@@ -47,6 +64,11 @@ class TypeError : Type
  * Strings etc are actually resolved to the real type of e.g. String class. */
 class BuiltinType : public Type
 {
+    enum
+    {
+        evVoid,
+    };
+
     virtual Type *copyWithSubs(std::vector<TypeParamBinding> subs);
 
     virtual void print(size_t in) { std::cout << "(builtin-type)"; }

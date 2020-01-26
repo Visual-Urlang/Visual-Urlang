@@ -17,6 +17,7 @@ the file "EULA.md", which should have been included with this file.
 #include <iostream>
 
 #include "Decl.h"
+#include "Module.h"
 #include "Scope.h"
 #include "Scoped.h"
 
@@ -43,6 +44,10 @@ void Scoped::regArg(ParamDecl *param)
     m_scope->reg(pSym);
 }
 
+Class *Sym::cls() { return dynamic_cast<Class *>(m_decl); }
+
+Type *Sym::type() { return m_decl->type(); }
+
 void Scope::addSubScope(Scope *sub) { m_subScopes.push_back(sub); }
 
 void Scope::reg(Sym *sym) { m_syms.push_back(sym); }
@@ -62,6 +67,8 @@ Type *Scope::findType(std::string type)
         {
             if (sym->isType())
                 return sym->type();
+            else if (sym->isCls())
+                return sym->cls()->prototype();
         }
     return m_super ? m_super->findType(type) : nullptr;
 }

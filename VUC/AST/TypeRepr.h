@@ -20,6 +20,7 @@ the file "EULA.md", which should have been included with this file.
 
 #include "Expr.h"
 #include "Node.h"
+#include "Type.h"
 
 class TypeRepr : public Node
 {
@@ -46,26 +47,14 @@ class TypeRepr : public Node
 class BuiltinTypeRepr : public TypeRepr
 {
   public:
-    enum BuiltinKind
-    {
-        evByte,
-        evBoolean,
-        evInteger,
-        evLong,
-        evLongLong,
-        evWord,
-        evSingle,
-        evDouble,
-        evCharacter,
-        evDate,
-        evObject,
-        evVariant,
-    } m_builtinKind;
+    enum BuiltinKind m_builtinKind;
 
     BuiltinTypeRepr(Position pos, BuiltinKind builtinKind)
         : TypeRepr(pos), m_builtinKind(builtinKind)
     {
     }
+
+    virtual Type *realise(Scope *superNode);
 
     virtual void print(size_t indent);
 };

@@ -14,7 +14,9 @@ the file "EULA.md", which should have been included with this file.
               All rights reserved.
 ********************************************************************/
 
-#include "AST/Stmt.h"
+#include "Stmt.h"
+#include "Scope.h"
+#include "Scoped.h"
 
 void CompoundStmt::print(size_t indent)
 {
@@ -25,4 +27,14 @@ void CompoundStmt::print(size_t indent)
         std::cout << "\n";
     }
     std::cout << blanks(indent) << "]";
+}
+
+ReturnStmt *ReturnStmt::typeCheck(Scoped *superNode)
+{
+    Type *r_type = superNode->scope()->findType("$ReturnType");
+
+    std::cout << "Return Stmt typecheck: Mai tsaip is:\n";
+    r_type->print(0);
+    std::cout << "\n\nDONERSTMT\n";
+    return this;
 }

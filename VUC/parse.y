@@ -505,7 +505,7 @@ expr(E)
 %type type_name { TypeRepr * }
 
 primary_type_name(T)
-	::= INTEGER. { T = new BuiltinTypeRepr(pos(), BuiltinTypeRepr::evInteger); }
+	::= INTEGER. { T = new BuiltinTypeRepr(pos(), evInteger); }
 primary_type_name(T)
 	::= IDENTIFIER(i). { T = new GenericTypeInstRepr(pos(), i.stringValue, {}); }
 primary_type_name(T)

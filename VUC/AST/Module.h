@@ -71,6 +71,7 @@ class Class : public Module
     std::vector<TypeLoc *> inherits() { return m_inherits; }
     std::vector<TypeLoc *> implements() const { return m_implements; }
     std::vector<TypeParamDecl *> params() const { return m_params; }
+    ClassInstType *prototype() { return m_prototype; }
 
     virtual void print(size_t indent);
     virtual void genSymTabs(Scoped *superNode, Scope *superScope) override;

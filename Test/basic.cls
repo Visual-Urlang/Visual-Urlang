@@ -21,7 +21,7 @@ End Class
 
 Public Class Main
     Public Function FMain 
-        Dim aDict As Dictionary(Of String, Integer)
+        Dim aDict As Dictionary(Of Integer, Integer)
 
     End Function
 End Class

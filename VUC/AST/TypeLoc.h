@@ -30,6 +30,7 @@ class TypeLoc
     explicit TypeLoc(TypeRepr *repr) : m_repr(repr) {}
 
     TypeRepr *repr() { return m_repr; }
+    Type *type() { return m_type; }
 
     void resolveInScope(Scope *aScope);
     void typeCheck(Scope *aScope);
