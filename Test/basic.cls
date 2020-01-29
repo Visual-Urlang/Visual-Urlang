@@ -8,15 +8,15 @@ Public Class Set Of T
     End Function
 End Class
 
-Public Class Association Of TA, TB
-End Class
-
 Public Class Dictionary Of TKey, TValue
     Inherits Set(Of Association(Of TKey, TValue))
 
     Public Function SetKey(ByVal key As TKey, ByVal value As TValue) As TValue
         Return key
     End Function
+End Class
+
+Public Class Association Of TA, TB
 End Class
 
 Public Class Main

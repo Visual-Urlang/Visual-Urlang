@@ -30,7 +30,12 @@ Type *UnboundTypeArg::copyWithSubs(std::vector<TypeParamBinding> subs)
     {
         printf("[[%s]]\n", t.name.c_str());
         if (t.name == m_name)
-            return t.type;
+        {
+            Type *cand = t.type;
+            if (m_isCls)
+                cand->makeClassType();
+            return cand;
+        }
     }
     std::cout << "could not resolve myself " << m_name << "\n";
     return nullptr;
@@ -41,7 +46,7 @@ void UnboundTypeArg::print(size_t in)
     std::cout << blanks(in) << "(unbound-type-arg: " << m_name << ")";
 }
 
-Type *ClassInstType::copyWithSubs(std::vector<TypeParamBinding> subs)
+ClassInstType *ClassInstType::copyWithSubs(std::vector<TypeParamBinding> subs)
 {
     ClassInstType *newTy;
     std::vector<Type *> newInherits = m_inherits;
@@ -57,7 +62,28 @@ Type *ClassInstType::copyWithSubs(std::vector<TypeParamBinding> subs)
     return newTy;
 }
 
-Type *ClassInstType::invoke(std::vector<Type *> subs)
+ClassInstType *ClassInstType::copyAsClass()
+{
+    ClassInstType *newTy;
+    auto newInherits = m_inherits;
+
+    for (auto &i : newInherits)
+        i = i->copyAsClass();
+
+    newTy = new ClassInstType(m_class, m_params);
+    newTy->m_inherits = newInherits;
+    newTy->makeClassType();
+    return newTy;
+}
+
+void ClassInstType::makeClassType()
+{
+    m_isCls = true;
+    for (auto i : m_inherits)
+        i->makeClassType();
+}
+
+ClassInstType *ClassInstType::invoke(std::vector<Type *> subs)
 {
     ClassInstType *newTy;
     std::vector<Type *> newInherits = m_inherits;
@@ -69,13 +95,16 @@ Type *ClassInstType::invoke(std::vector<Type *> subs)
         i = i->copyWithSubs(changes);
 
     newTy = new ClassInstType(m_class, changes);
+    if (m_isCls)
+        newTy->makeClassType();
     newTy->m_inherits = newInherits;
     return newTy;
 }
 
 void ClassInstType::print(size_t in)
 {
-    std::cout << blanks(in) << "(class-inst: " << m_class->name() << "\n";
+    std::cout << blanks(in) << "(" << (m_isCls ? "+" : "-")
+              << "class-inst: " << m_class->name() << "\n";
 
     if (!m_params.empty())
     {

@@ -98,16 +98,9 @@ void Class::resolveInheritance(Scoped *superNode)
     m_prototype->print(0);
     std::cout << "\n\n";
 
-    /* test case */
-    if (m_name == "Dictionary")
-    {
-        std::vector<Type *> tys;
-        tys.push_back(new BuiltinType);
-        tys.push_back(new BuiltinType);
-        m_prototype->invoke(tys)->print(0);
-    }
-    // for (auto d : m_inherits)
-    //    d->resolveInScope(m_scope);
+    m_classPrototype = m_prototype->copyAsClass();
+    m_classPrototype->print(0);
+    std::cout << "\n\n";
 }
 
 Node *Class::typeCheck(Scoped *superNode)
@@ -127,7 +120,7 @@ Node *Class::typeCheck(Scoped *superNode)
     }
 
     selfType = m_prototype->invoke(selfTypeArgs);
-    m_scope->reg(new Sym("InstanceType", this, Sym::evType));
+    m_scope->reg(new Sym("SelfType", this, Sym::evType));
 
     for (auto &n : m_body->getCode())
     {

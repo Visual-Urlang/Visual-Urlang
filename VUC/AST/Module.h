@@ -50,7 +50,7 @@ class Module : public Decl, public Scoped
 
 class Class : public Module
 {
-    ClassInstType *m_prototype;
+    ClassInstType *m_prototype, *m_classPrototype;
     /* Superclasses */
     std::vector<TypeLoc *> m_inherits;
     /* Interfaces implemented */
@@ -72,6 +72,7 @@ class Class : public Module
     std::vector<TypeLoc *> implements() const { return m_implements; }
     std::vector<TypeParamDecl *> params() const { return m_params; }
     ClassInstType *prototype() { return m_prototype; }
+    ClassInstType *classPrototype() { return m_classPrototype; }
 
     virtual void print(size_t indent);
     virtual void genSymTabs(Scoped *superNode, Scope *superScope) override;

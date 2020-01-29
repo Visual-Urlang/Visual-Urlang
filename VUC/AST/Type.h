@@ -46,12 +46,19 @@ class Class;
 class Type
 {
   public:
+    virtual Type *copyAsClass()
+    {
+        this->makeClassType();
+        return this;
+    }
     virtual Type *copyWithSubs(std::vector<TypeParamBinding> subs)
     {
         std::cout << "unimplemented copyWithSubs() in " << typeid(*this).name()
                   << "\n";
         return this;
     }
+
+    virtual void makeClassType() { std::cout << "UNIMPLEMENTED MAKECLASSTYPE"; }
 
     virtual void print(size_t in) { std::cout << blanks(in) << "unknown type"; }
 };
@@ -83,13 +90,22 @@ class UnboundTypeArg : public Type
   public:
     std::string m_name;
     Decl *m_decl;
+    bool m_isCls;
 
     explicit UnboundTypeArg(std::string name, Decl *decl)
-        : m_name(name), m_decl(decl)
+        : m_name(name), m_decl(decl), m_isCls(false)
     {
     }
 
+    virtual UnboundTypeArg *copyAsClass()
+    {
+        UnboundTypeArg *newTy = new UnboundTypeArg(*this);
+        newTy->makeClassType();
+        return this;
+    }
     virtual Type *copyWithSubs(std::vector<TypeParamBinding> subs);
+
+    virtual void makeClassType() { m_isCls = true; }
 
     virtual void print(size_t in);
 };
@@ -127,6 +143,8 @@ class ClassInstType : public Type
     /* Table of names to their concrete type replacements. Used to substitute
      * type parameter uses by Dims and methods of the class.*/
     std::vector<TypeParamBinding> m_params;
+    /* Is it a class-of type? */
+    bool m_isCls;
 
   public:
     ClassInstType(Class *class_, std::vector<TypeParamBinding> params)
@@ -140,11 +158,16 @@ class ClassInstType : public Type
     void addInherited(Type *inh) { m_inherits.push_back(inh); }
 
     /* Invoke this type with these arguments. */
-    virtual Type *invoke(std::vector<Type *> subs);
+    virtual ClassInstType *invoke(std::vector<Type *> subs);
 
     /* Copy type, substituting all instances of UnboundTypeArg that can be
      * subbed.*/
-    virtual Type *copyWithSubs(std::vector<TypeParamBinding> subs) override;
+    virtual ClassInstType *
+    copyWithSubs(std::vector<TypeParamBinding> subs) override;
+    ClassInstType *copyAsClass() override;
+
+    /* Make it a class-of type. */
+    virtual void makeClassType();
 
     virtual void print(size_t in);
 };
