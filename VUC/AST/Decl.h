@@ -74,10 +74,12 @@ class DimDecl : public NamedDecl
     {
     }
 
-    virtual void print(size_t indent);
-
     virtual void genSymTabs(Scoped *superNode, Scope *superScope) override;
     virtual DimDecl *typeCheck(Scoped *superNode) override;
+
+    virtual Type *type();
+
+    virtual void print(size_t indent);
 };
 
 class ParamDecl : public DimDecl

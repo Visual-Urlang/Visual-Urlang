@@ -32,9 +32,12 @@ void CompoundStmt::print(size_t indent)
 ReturnStmt *ReturnStmt::typeCheck(Scoped *superNode)
 {
     Type *r_type = superNode->scope()->findType("$ReturnType");
+    Type *e_type = m_expr->getType(superNode);
 
     std::cout << "Return Stmt typecheck: Mai tsaip is:\n";
     r_type->print(0);
+    std::cout << "Etype is:";
+    e_type->print(0);
     std::cout << "\n\nDONERSTMT\n";
     return this;
 }

@@ -21,11 +21,14 @@ the file "EULA.md", which should have been included with this file.
 #include "Node.h"
 
 class Decl;
+class Type;
 
 class Expr : public Node
 {
   public:
     explicit Expr(Position pos) : Node(pos) {}
+
+    virtual Type *getType(Scoped *scope);
 };
 
 class FunCallExpr : public Expr
@@ -50,6 +53,8 @@ class IdentExpr : public Expr
 
   public:
     explicit IdentExpr(Position _pos, std::string id) : Expr(_pos), m_id(id) {}
+
+    Type *getType(Scoped *scope) override;
 
     virtual void print(size_t indent);
 

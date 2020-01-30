@@ -48,6 +48,35 @@ Class *Sym::cls() { return dynamic_cast<Class *>(m_decl); }
 
 Type *Sym::type() { return m_decl->type(); }
 
+std::string Sym::toStr()
+{
+    std::string ks;
+    switch (m_kind)
+    {
+    case evCls:
+        ks = "Class";
+        break;
+    case evIVar:
+        ks = "IVar";
+        break;
+    case evFun:
+        ks = "Fun";
+        break;
+    case evLocal:
+        ks = "Local";
+        break;
+    case evArg:
+        ks = "Arg";
+        break;
+    case evTypeParam:
+        ks = "TypeParam";
+        break;
+    case evType:
+        ks = "Type";
+    }
+    return "(sym: " + m_name + " kind: " + ks + ")";
+}
+
 void Scope::addSubScope(Scope *sub) { m_subScopes.push_back(sub); }
 
 void Scope::reg(Sym *sym) { m_syms.push_back(sym); }

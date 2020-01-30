@@ -16,7 +16,16 @@ the file "EULA.md", which should have been included with this file.
 
 #include <iostream>
 
-#include "AST/Expr.h"
+#include "Expr.h"
+#include "Scope.h"
+#include "Scoped.h"
+#include "Type.h"
+
+Type *Expr::getType(Scoped *aScoped)
+{
+    std::cout << "unimplemented getType in " << typeid(*this).name() << "\n";
+    return nullptr;
+}
 
 void FunCallExpr::print(size_t indent)
 {
@@ -33,6 +42,17 @@ void FunCallExpr::print(size_t indent)
     }
 
     std::cout << blanks(indent) << "]";
+}
+
+Type *IdentExpr::getType(Scoped *scope)
+{
+    if (Sym *cand = scope->scope()->find(m_id))
+        return cand->type();
+    else
+    {
+        std::cout << "Error: Undeclared identifier " << m_id << "\n";
+        return nullptr;
+    }
 }
 
 void IdentExpr::print(size_t indent)

@@ -70,6 +70,8 @@ class Sym
     bool isTypeParam() { return m_kind == evTypeParam; }
     /* type entry */
     bool isType() { return m_kind == evType; }
+
+    std::string toStr();
 };
 
 class InternalTypeSym : public Sym
