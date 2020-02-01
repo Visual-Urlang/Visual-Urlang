@@ -22,6 +22,7 @@ the file "EULA.md", which should have been included with this file.
 #include "Scoped.h"
 
 class CompoundStmt;
+struct TypeParamBinding;
 
 /* A Module is either a class or a collection of other things instead. */
 class Module : public Decl, public Scoped
@@ -73,6 +74,11 @@ class Class : public Module
     std::vector<TypeParamDecl *> params() const { return m_params; }
     ClassInstType *prototype() { return m_prototype; }
     ClassInstType *classPrototype() { return m_classPrototype; }
+    std::vector<FunDecl *> methods();
+
+    Type *type() { return m_classPrototype; }
+
+    Type *makeTypeInClass(std::vector<TypeParamBinding> subs, TypeRepr *repr);
 
     virtual void print(size_t indent);
     virtual void genSymTabs(Scoped *superNode, Scope *superScope) override;

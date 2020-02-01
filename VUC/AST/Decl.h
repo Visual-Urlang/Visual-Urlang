@@ -77,6 +77,7 @@ class DimDecl : public NamedDecl
     virtual void genSymTabs(Scoped *superNode, Scope *superScope) override;
     virtual DimDecl *typeCheck(Scoped *superNode) override;
 
+    virtual TypeRepr *typeRepr();
     virtual Type *type();
 
     virtual void print(size_t indent);
@@ -109,6 +110,15 @@ class FunDecl : public NamedDecl, public Scoped
 
     void genSymTabs(Scoped *superNode, Scope *superScope) override;
     virtual void regDim(DimDecl *decl) override;
+
+    TypeRepr *rTypeRepr() { return m_rType->repr(); }
+    std::vector<TypeRepr *> argTypeReprs()
+    {
+        std::vector<TypeRepr *> reprs;
+        for (auto f : m_formals)
+            reprs.push_back(f->typeRepr());
+        return reprs;
+    }
 
     virtual FunDecl *typeCheck(Scoped *superNode) override;
 

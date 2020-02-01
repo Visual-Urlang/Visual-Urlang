@@ -20,6 +20,7 @@ the file "EULA.md", which should have been included with this file.
 #include "AST/Stmt.h"
 #include "AST/Unit.h"
 #include "Scope.h"
+#include "Type.h"
 
 void Unit::print(size_t indent)
 {
@@ -61,6 +62,30 @@ void Unit::regClass(Class *decl)
 }
 
 std::string Module::name() const { return m_name; }
+
+std::vector<FunDecl *> Class::methods()
+{
+    std::vector<FunDecl *> meths;
+    for (auto n : m_body->getCode())
+        if (FunDecl *fun = dynamic_cast<FunDecl *>(n))
+            meths.push_back(fun);
+    return meths;
+}
+
+Type *Class::makeTypeInClass(std::vector<TypeParamBinding> subs, TypeRepr *repr)
+{
+    Scope *tempScope = new Scope(m_scope);
+
+    for (auto s : subs)
+    {
+        tempScope->reg(new InternalTypeSym(s.name, nullptr, s.type));
+    }
+    Type *tmpType = repr->realise(tempScope);
+    printf("\n\n<<<\n");
+    tmpType->print(5);
+    printf("\n\n>>\n\n");
+    return tmpType;
+}
 
 void Class::print(size_t indent)
 {

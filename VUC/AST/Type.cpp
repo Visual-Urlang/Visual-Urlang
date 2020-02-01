@@ -83,6 +83,27 @@ void ClassInstType::makeClassType()
         i->makeClassType();
 }
 
+Type *ClassInstType::getTypeOfMember(std::string mem, Class *parentCls)
+{
+    /* Option 1: A method*/
+    for (auto m : m_class->methods())
+        if (m->name() == mem)
+        {
+            FunType *call;
+
+            Type *rType = m_class->makeTypeInClass(m_params, m->rTypeRepr());
+            std::vector<Type *> aTypes;
+
+            for (auto r : m->argTypeReprs())
+                aTypes.push_back(m_class->makeTypeInClass(m_params, r));
+
+            call = new FunType(m_class, rType, aTypes);
+
+            return call;
+        }
+    return nullptr;
+}
+
 ClassInstType *ClassInstType::invoke(std::vector<Type *> subs)
 {
     ClassInstType *newTy;
@@ -98,6 +119,7 @@ ClassInstType *ClassInstType::invoke(std::vector<Type *> subs)
     if (m_isCls)
         newTy->makeClassType();
     newTy->m_inherits = newInherits;
+    newTy->m_isInvoked = true;
     return newTy;
 }
 
@@ -122,8 +144,8 @@ void ClassInstType::print(size_t in)
         std::cout << blanks(in) << "inherits: (";
         for (auto p : m_inherits)
         {
-            p->print(in + 2);
             std::cout << "\n";
+            p->print(in + 2);
         }
         std::cout << blanks(in) << ")\n";
     }

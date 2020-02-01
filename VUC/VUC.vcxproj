@@ -200,6 +200,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AST\AST.h" />
     <ClInclude Include="AST\Constant.h" />
     <ClInclude Include="AST\Decl.h" />
     <ClInclude Include="AST\Expr.h" />

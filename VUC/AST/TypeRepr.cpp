@@ -60,6 +60,10 @@ Type *TypeRepr::resolveInScope(Scope *aScope)
 }
 
 Type *BuiltinTypeRepr::realise(Scope *superNode) { return new BuiltinType; }
+Type *BuiltinTypeRepr::resolveInScope(Scope *superNode)
+{
+    return realise(superNode);
+}
 
 void BuiltinTypeRepr::print(size_t indent)
 {
@@ -158,7 +162,9 @@ Type *GenericTypeInstRepr::realise(Scope *aScope)
         args.push_back(a->realise(aScope));
 
     if (auto ci = dynamic_cast<ClassInstType *>(base))
-        return ci->invoke(args);
+        return !ci->isInvoked() ? ci->invoke(args) : ci;
+    else if (args.empty())
+        return base; /* builtin case */
 
     std::cout << "failure in realisation of generic\n";
     return nullptr;

@@ -27,6 +27,21 @@ Type *Expr::getType(Scoped *aScoped)
     return nullptr;
 }
 
+Type *FunCallExpr::getType(Scoped *scope)
+{
+    FunType *funType = dynamic_cast<FunType *>(m_func->getType(scope));
+
+    printf("Fun Type:\n");
+    funType->print(12);
+
+    for (auto m : m_args)
+    {
+        /* check if arg matches */
+    }
+
+    return funType->rType();
+}
+
 void FunCallExpr::print(size_t indent)
 {
     std::cout << blanks(indent) << "[Funcall: recvr: \n";
@@ -58,6 +73,14 @@ Type *IdentExpr::getType(Scoped *scope)
 void IdentExpr::print(size_t indent)
 {
     std::cout << blanks(indent) << "[IdentExpr: " << m_id << "]";
+}
+
+Type *DotExpr::getType(Scoped *scope)
+{
+    Type *baseType = m_base->getType(scope);
+    Type *mem = baseType->getTypeOfMember(m_id);
+    // baseType->print(12);
+    return mem;
 }
 
 void DotExpr::print(size_t indent)

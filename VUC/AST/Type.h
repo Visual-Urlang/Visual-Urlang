@@ -46,6 +46,12 @@ class Class;
 class Type
 {
   public:
+    virtual Type *getTypeOfMember(std::string mem, Class *parentCls = nullptr)
+    {
+        UNIMPL;
+        return nullptr;
+    }
+
     virtual Type *copyAsClass()
     {
         this->makeClassType();
@@ -53,12 +59,11 @@ class Type
     }
     virtual Type *copyWithSubs(std::vector<TypeParamBinding> subs)
     {
-        std::cout << "unimplemented copyWithSubs() in " << typeid(*this).name()
-                  << "\n";
+        UNIMPL;
         return this;
     }
 
-    virtual void makeClassType() { std::cout << "UNIMPLEMENTED MAKECLASSTYPE"; }
+    virtual void makeClassType() { UNIMPL; }
 
     virtual void print(size_t in) { std::cout << blanks(in) << "unknown type"; }
 };
@@ -78,7 +83,10 @@ class BuiltinType : public Type
 
     virtual Type *copyWithSubs(std::vector<TypeParamBinding> subs);
 
-    virtual void print(size_t in) { std::cout << "(builtin-type)"; }
+    virtual void print(size_t in)
+    {
+        std::cout << blanks(in) + "(builtin-type)";
+    }
 };
 
 /* To support HKTs, this should have an entry for its type parameters too.
@@ -129,11 +137,20 @@ struct TypeParamBinding
     }
 };
 
-/*struct FunType
+class FunType : public Type
 {
-    Type *rType;
-    std::vector<Type *> argTypes;
-};*/
+    Class *m_class;
+    Type *m_rType;
+    std::vector<Type *> m_argTypes;
+
+  public:
+    FunType(Class *class_, Type *type, std::vector<Type *> argTypes)
+        : m_class(class_), m_rType(type), m_argTypes(argTypes)
+    {
+    }
+
+    Type *rType() { return m_rType; }
+};
 
 /* Instantiated type*/
 class ClassInstType : public Type
@@ -145,6 +162,7 @@ class ClassInstType : public Type
     std::vector<TypeParamBinding> m_params;
     /* Is it a class-of type? */
     bool m_isCls;
+    bool m_isInvoked = false;
 
   public:
     ClassInstType(Class *class_, std::vector<TypeParamBinding> params)
@@ -157,8 +175,11 @@ class ClassInstType : public Type
     void addArg(TypeParamBinding anArg) { m_params.push_back(anArg); }
     void addInherited(Type *inh) { m_inherits.push_back(inh); }
 
+    Type *getTypeOfMember(std::string mem, Class *parentCls = nullptr);
+
     /* Invoke this type with these arguments. */
     virtual ClassInstType *invoke(std::vector<Type *> subs);
+    bool isInvoked() { return m_isInvoked; }
 
     /* Copy type, substituting all instances of UnboundTypeArg that can be
      * subbed.*/

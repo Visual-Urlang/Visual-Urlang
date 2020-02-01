@@ -40,6 +40,8 @@ DimDecl *DimDecl::typeCheck(Scoped *superNode)
     return this;
 }
 
+TypeRepr *DimDecl::typeRepr() { return m_typeLoc.repr(); }
+
 Type *DimDecl::type() { return m_typeLoc.type(); }
 
 void ParamDecl::genSymTabs(Scoped *superNode, Scope *superScope)

@@ -42,6 +42,8 @@ class FunCallExpr : public Expr
     {
     }
 
+    Type *getType(Scoped *scope) override;
+
     virtual void print(size_t indent);
 };
 
@@ -71,6 +73,8 @@ class DotExpr : public Expr
         : Expr(_pos), m_id(id), m_base(base)
     {
     }
+
+    Type *getType(Scoped *scope) override;
 
     virtual void print(size_t indent);
 };

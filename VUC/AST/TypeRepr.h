@@ -55,6 +55,7 @@ class BuiltinTypeRepr : public TypeRepr
     }
 
     virtual Type *realise(Scope *superNode);
+    virtual Type *resolveInScope(Scope *aScope);
 
     virtual void print(size_t indent);
 };

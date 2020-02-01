@@ -18,4 +18,8 @@ the file "EULA.md", which should have been included with this file.
 
 #include <string>
 
+#define UNIMPL                                                                 \
+    std::cout << "FAULT: " << __FUNCSIG__ << ": Not implemented in "           \
+              << typeid(*this).name() << "\n"
+
 inline std::string blanks(size_t n) { return std::string(n, ' '); }
